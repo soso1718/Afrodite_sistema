@@ -26,4 +26,17 @@
             </div>
         </div>
     </div>
+
+    <h2>Respostas do Questionário</h2>
+
+    @foreach($respostas as $resposta)
+        <div class="resposta">
+            <p><strong>Idade:</strong> {{ $resposta->idade }}</p>
+            <p><strong>Ciclo Regular:</strong> {{ $resposta->cicloRegular }}</p>
+            <p><strong>Data da Última Menstruação:</strong> {{ $resposta->dataUltimaMenstruacao }}</p>
+            <p><strong>Objetivo:</strong> {{ implode(', ', $resposta->objetivo) }}</p>
+            <p><strong>Saúde Importante:</strong> {{ $resposta->saudeImportante }}</p>
+            <p><strong>Uso de Hormônios:</strong> {{ implode(', ', $resposta->hormoniosTipo) }}</p>
+        </div>
+    @endforeach             
 </x-app-layout>
