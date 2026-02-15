@@ -13,9 +13,20 @@ return new class extends Migration
     {
         Schema::create('respostas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('pergunta');
-            $table->text('resposta')->nullable();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
+            $table->integer('idade')->nullable();
+            $table->string('ciclo_regular')->nullable();
+            $table->string('data_ultima_menstruacao')->nullable();
+
+            $table->json('objetivo')->nullable();
+            $table->string('objetivo_outro')->nullable();
+
+            $table->string('saude_importante')->nullable();
+
+            $table->string('hormonios')->nullable();
+            $table->json('hormonios_tipo')->nullable();
+
             $table->timestamps();
         });
     }

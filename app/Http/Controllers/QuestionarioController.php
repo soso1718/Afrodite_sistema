@@ -24,22 +24,32 @@ class QuestionarioController extends Controller
 
     public function store(Request $request)
     {
-        foreach ($request->respostas as $pergunta => $resposta) {
-            
-            if (is_array($resposta)) {
-                $resposta = implode(', ', $resposta);
-            }
+        $jaRespondeu = Resposta::where('user_id', $request->user()->id)->exists();
 
-            \App\Models\Resposta::create([
-                'user_id' => $request->user()->id,
-                'pergunta' => $pergunta,
-                'resposta' => $resposta,
-            ]);
+        if ($jaRespondeu) {
+            return redirect('/dashboard')
+                ->with('error', 'Você já respondeu o questionário.');
         }
 
-        return redirect('/dashboard')
-            ->with('success', 'Questionário enviado com sucesso!');
+        $dados = $request->respostas;
+
+    if (!empty($dados['dataUltimaMenstruacaoNaoSei'])) {
+        $dados['dataUltimaMenstruacao'] = 'nao_sei';
     }
 
+    Resposta::create([
+        'user_id' => $request->user()->id,
+        'idade' => $dados['idade'] ?? null,
+        'ciclo_regular' => $dados['cicloRegular'] ?? null,
+        'data_ultima_menstruacao' => $dados['dataUltimaMenstruacao'] ?? null,
+        'objetivo' => $dados['objetivo'] ?? null,
+        'objetivo_outro' => $dados['objetivoOutro'] ?? null,
+        'saude_importante' => $dados['saudeImportante'] ?? null,
+        'hormonios' => $dados['hormonios'] ?? null,
+        'hormonios_tipo' => $dados['hormoniosTipo'] ?? null,
+    ]);
+
+    return redirect('/dashboard')->with('success', 'Questionário enviado!');
 }
 
+}
