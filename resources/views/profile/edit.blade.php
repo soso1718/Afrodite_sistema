@@ -75,6 +75,10 @@
                     @endswitch
                 </p>
 
+                <a href="{{ route('questionario.edit') }}" class="btn btn-primary">
+                    <x-primary-button>Editar Respostas</x-primary-button>
+                </a>
+
 </div>
 
 
