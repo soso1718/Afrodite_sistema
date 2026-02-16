@@ -33,6 +33,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/questionario', [QuestionarioController::class, 'store'])
         ->name('questionario.store')
         ->middleware('auth');
+        
+    Route::get('/questionario/editar', [QuestionarioController::class, 'edit'])
+        ->name('questionario.edit');
+        
+    Route::put('/questionario/update', [QuestionarioController::class, 'update'])
+        ->name('questionario.update');
 
 });
 
