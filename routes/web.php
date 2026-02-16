@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestionarioController;
+use App\Http\Controllers\ArtigoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,6 +34,25 @@ Route::middleware(['auth'])->group(function () {
         ->name('questionario.store')
         ->middleware('auth');
 
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/artigos', [ArtigoController::class, 'index'])
+        ->name('artigos.index');
+
+    Route::get('/artigos/{artigo}', [ArtigoController::class, 'show'])
+        ->whereNumber('artigo')
+        ->name('artigos.show');
+});
+
+
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        Route::resource('artigos', ArtigoController::class)
+            ->except(['index', 'show']);
 });
 
 
