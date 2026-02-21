@@ -11,7 +11,7 @@
     <h1>Artigos (Admin)</h1>
 
     <p>
-        <a href="{{ route('artigos.create') }}">
+        <a href="{{ route('admin.artigos.create') }}">
             Criar novo artigo
         </a>
     </p>
@@ -30,12 +30,12 @@
                 Ver
             </a>
             |
-            <a href="{{ route('artigos.edit', $artigo->id) }}">
+            <a href="{{ route('admin.artigos.edit', $artigo->id) }}">
                 Editar
             </a>
             |
             <form
-                action="{{ route('artigos.destroy', $artigo->id) }}"
+                action="{{ route('admin.artigos.destroy', $artigo->id) }}"
                 method="POST"
                 onsubmit="return confirm('Tem certeza que deseja excluir este artigo?')">
                 @csrf

@@ -18,7 +18,7 @@
     @endif
 
 
-    <form method="POST" action="{{ route('artigos.store') }}">
+    <form method="POST" action="{{ route('admin.artigos.store') }}">
         @csrf
 
         <p>
