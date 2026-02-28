@@ -33,8 +33,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         calendar.render();
-        console.log('Calendar rendered successfully');
-    } else {
-        console.log('Calendar element not found');
     }
 });

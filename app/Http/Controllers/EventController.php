@@ -28,7 +28,25 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $events = $request->all();
+            
+            // Limpa eventos existentes
+            \App\Models\Event::truncate();
+            
+            // Salva novos eventos
+            foreach ($events as $eventData) {
+                \App\Models\Event::create([
+                    'title' => $eventData['title'],
+                    'start' => $eventData['start'],
+                    'end' => $eventData['end'] ?? null,
+                ]);
+            }
+            
+            return response()->json(['success' => true, 'message' => 'Eventos salvos com sucesso!']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 
     /**

@@ -18,4 +18,8 @@
         </div>
     </div>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    <!-- Full Calendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.20/main.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.20/main.min.css" rel="stylesheet">
 </x-app-layout>
