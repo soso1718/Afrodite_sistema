@@ -29,7 +29,33 @@ document.addEventListener('DOMContentLoaded', function() {
             selectable: true,
             dayMaxEvents: true,
             weekends: true,
-            height: 'auto'
+            height: 'auto',
+
+            // ✅ ADICIONE ISSO — detecta o clique no dia
+            dateClick: function(info) {
+                var dataSelecionada = info.dateStr; // ex: "2025-03-08"
+
+                fetch('/events', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ date: dataSelecionada })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Marca o dia de vermelho sem recarregar a página
+                        calendar.addEvent({
+                            start: dataSelecionada,
+                            display: 'background',
+                            color: '#f87171'
+                        });
+                    }
+                })
+                .catch(error => console.error('Erro:', error));
+            }
         });
         
         calendar.render();

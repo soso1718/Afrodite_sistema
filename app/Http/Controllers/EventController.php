@@ -12,7 +12,16 @@ class EventController extends Controller
      */
     public function index()
     {
-        return response()->json(Event::all());
+        $events = Event::where('user_id', auth()->id())
+            ->get()
+            ->map(function ($event) {
+                return [
+                    'start'   => $event->date,
+                    'display' => 'background',
+                    'color'   => '#f87171',
+                ];
+            });
+        return response()->json($events);
     }
 
     /**
@@ -28,25 +37,12 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $events = $request->all();
-            
-            // Limpa eventos existentes
-            \App\Models\Event::truncate();
-            
-            // Salva novos eventos
-            foreach ($events as $eventData) {
-                \App\Models\Event::create([
-                    'title' => $eventData['title'],
-                    'start' => $eventData['start'],
-                    'end' => $eventData['end'] ?? null,
-                ]);
-            }
-            
-            return response()->json(['success' => true, 'message' => 'Eventos salvos com sucesso!']);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()]);
-        }
+        $event = Event::create([
+            'date' => $request->date,
+            'user_id' => auth()->id(),
+        ]);
+
+        return response()->json(['success' => true, 'event' => $event]);
     }
 
     /**

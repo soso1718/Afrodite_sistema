@@ -10,16 +10,11 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-medium mb-4">{{ __('Calendar') }}</h3>
-                    <div id="calendar" class="min-h-[600px] border-2 border-gray-200 rounded-lg p-4">
-                        <!-- Calendar will be rendered here -->
-                    </div>
+                    <div id="calendar" class="min-h-[600px] border-2 border-gray-200 rounded-lg p-4"></div>
                 </div>
             </div>
         </div>
     </div>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
-    <!-- Full Calendar CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.20/main.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.20/main.min.css" rel="stylesheet">
 </x-app-layout>
