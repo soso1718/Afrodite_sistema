@@ -36,14 +36,23 @@ class EventController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $event = Event::create([
-            'date' => $request->date,
-            'user_id' => auth()->id(),
-        ]);
+{
+    // ✅ Verifica se já existe essa data para esse usuário
+    $jaExiste = Event::where('user_id', auth()->id())
+                     ->where('date', $request->date)
+                     ->exists();
 
-        return response()->json(['success' => true, 'event' => $event]);
+    if ($jaExiste) {
+        return response()->json(['success' => false, 'message' => 'Data já marcada!']);
     }
+
+    $event = Event::create([
+        'date'    => $request->date,
+        'user_id' => auth()->id(),
+    ]);
+
+    return response()->json(['success' => true, 'event' => $event]);
+}
 
     /**
      * Display the specified resource.
