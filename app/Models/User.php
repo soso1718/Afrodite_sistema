@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Resposta::class);
     }
+
+        public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }

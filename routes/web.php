@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestionarioController;
 use App\Http\Controllers\ArtigoController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\RegistroController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,8 +19,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::get('/events', [EventController::class, 'index']);
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
+
+    Route::get('/registros', [RegistroController::class, 'index'])->name('registros.index');
 
 });
 

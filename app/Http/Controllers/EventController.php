@@ -4,24 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\User;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $events = Event::where('user_id', auth()->id())
-            ->get()
-            ->map(function ($event) {
-                return [
-                    'start'   => $event->date,
-                    'display' => 'background',
-                    'color'   => '#f87171',
-                ];
-            });
-        return response()->json($events);
+        ->whereBetween('date', [$request->start, $request->end])
+        ->get()
+        ->map(function ($event) {
+            return [
+                'id'    => $event->id,
+                'title' => $event->title,   // agora aparece no calendário
+                'start' => $event->date,    // FullCalendar usa 'start'
+                // se quiser cor ou estilo:
+                'color' => '#f87171',
+            ];
+        });
+
+    return response()->json($events);
     }
 
     /**
@@ -37,21 +43,51 @@ class EventController extends Controller
      */
     public function store(Request $request)
 {
-    // ✅ Verifica se já existe essa data para esse usuário
-    $jaExiste = Event::where('user_id', auth()->id())
-                     ->where('date', $request->date)
-                     ->exists();
-
-    if ($jaExiste) {
-        return response()->json(['success' => false, 'message' => 'Data já marcada!']);
-    }
-
-    $event = Event::create([
-        'date'    => $request->date,
-        'user_id' => auth()->id(),
+     $request->validate([
+        'date' => 'required|date'
     ]);
 
-    return response()->json(['success' => true, 'event' => $event]);
+    $userId = auth()->id();
+    $inicio = Carbon::parse($request->date)->startOfDay();
+
+    $jaExiste = Event::where('user_id', $userId)
+        ->whereDate('date', $inicio)
+        ->exists();
+
+    if ($jaExiste) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Data já marcada!'
+        ]);
+    }
+
+    // Menstruação (7 dias)
+    for ($i = 0; $i < 7; $i++) {
+        Event::create([
+            'user_id' => $userId,
+            'date' => $inicio->copy()->addDays($i)->toDateString(),
+            'title' => 'Menstruação'
+        ]);
+    }
+
+    // Ovulação (+14 dias)
+    $ovulacao = $inicio->copy()->addDays(14);
+    Event::create([
+        'user_id' => $userId,
+        'date' => $ovulacao->toDateString(),
+        'title' => 'Ovulação'
+    ]);
+
+    // Período fértil (-3 até +3 dias)
+    for ($i = -3; $i <= 3; $i++) {
+        Event::create([
+            'user_id' => $userId,
+            'date' => $ovulacao->copy()->addDays($i)->toDateString(),
+            'title' => 'Período fértil'
+        ]);
+    }
+
+    return response()->json(['success' => true]);
 }
 
     /**
@@ -85,4 +121,5 @@ class EventController extends Controller
     {
         //
     }
+
 }
