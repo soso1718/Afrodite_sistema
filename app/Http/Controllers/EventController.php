@@ -20,9 +20,8 @@ class EventController extends Controller
         ->map(function ($event) {
             return [
                 'id'    => $event->id,
-                'title' => $event->title,   // agora aparece no calendário
-                'start' => $event->date,    // FullCalendar usa 'start'
-                // se quiser cor ou estilo:
+                'title' => $event->title,   
+                'start' => $event->date,   
                 'color' => '#f87171',
             ];
         });
