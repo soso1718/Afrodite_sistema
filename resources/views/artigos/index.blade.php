@@ -1,35 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artigos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sansita+One&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'DM Sans', sans-serif; }
+        .font-display { font-family: 'Sansita One', cursive; }
+    </style>
+    <title>Afrodite — Artigos</title>
 </head>
-<body>
-    
-<x-app-layout>
 
-    <h1>Artigos</h1>
+<body class="flex justify-center bg-[#1a0009] min-h-screen">
 
-    @forelse ($artigos as $artigo)
-        <hr>
+    <div class="w-full min-w-[320px] max-w-sm min-h-screen overflow-x-hidden
+                bg-gradient-to-b from-[#720026] via-[#900131] to-[#D80048]
+                flex flex-col px-4 pt-6 pb-28">
 
-        <h2>{{ $artigo->titulo }}</h2>
+        {{-- Header --}}
+        <div class="mb-5">
+            <p class="text-[#E8A8B5] text-xs tracking-[0.2em] uppercase font-medium mb-1">Leitura</p>
+            <h1 class="font-display text-white text-2xl leading-tight">Artigos</h1>
+        </div>
 
-        <p>
-            {{ \Illuminate\Support\Str::limit($artigo->conteudo, 200) }}
-        </p>
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-5"></div>
 
-        <a href="{{ route('artigos.show', $artigo->id) }}">
-            Ler artigo
-        </a>
+        {{-- Lista de artigos --}}
+        <div class="flex flex-col gap-4">
 
-    @empty
-        <p>Não há artigos cadastrados.</p>
-    @endforelse
+            @forelse ($artigos as $artigo)
 
-</x-app-layout>
+                <div class="w-full bg-[#B23A48] rounded-2xl p-4 shadow-xl text-white flex flex-col gap-3">
 
+                    <h2 class="font-display text-base leading-snug">
+                        {{ $artigo->titulo }}
+                    </h2>
+
+                    <p class="text-sm text-white/70 leading-relaxed flex-1">
+                        {{ \Illuminate\Support\Str::limit($artigo->conteudo, 120) }}
+                    </p>
+
+                    <a
+                        href="{{ route('artigos.show', $artigo->id) }}"
+                        class="font-display w-full text-center
+                               bg-[#E8A8B5] text-[#5a0018]
+                               text-sm tracking-wide
+                               py-2.5 rounded-lg
+                               active:scale-95 transition-transform"
+                    >
+                        Ler artigo
+                    </a>
+
+                </div>
+
+            @empty
+
+                <div class="w-full bg-[#B23A48] rounded-2xl p-4 shadow-xl text-white text-center text-sm text-white/60">
+                    Não há artigos cadastrados.
+                </div>
+
+            @endforelse
+
+        </div>
+
+    </div>
+
+    {{-- Navbar --}}
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2
+            w-full min-w-[320px] max-w-sm
+            bg-[#720026]
+            flex justify-around items-center
+            py-3 z-50">
+
+    <a href="{{ route('dashboard') }}"
+       class="relative group flex flex-col items-center active:scale-90 transition">
+        <span class="
+            absolute -top-8
+            bg-[#E8A8B5] text-[#5a0018]
+            text-[10px] tracking-wide
+            px-2 py-0.5 rounded-md
+            whitespace-nowrap
+            opacity-0 group-hover:opacity-100
+            transition-opacity duration-200
+            pointer-events-none
+        ">Início</span>
+        <img src="{{ asset('icons/casa.svg') }}" class="w-6 h-6">
+    </a>
+
+    <a href="{{ route('artigos.index') }}"
+       class="relative group flex flex-col items-center active:scale-90 transition">
+        <span class="
+            absolute -top-8
+            bg-[#E8A8B5] text-[#5a0018]
+            text-[10px] tracking-wide
+            px-2 py-0.5 rounded-md
+            whitespace-nowrap
+            opacity-0 group-hover:opacity-100
+            transition-opacity duration-200
+            pointer-events-none
+        ">Artigos</span>
+        <img src="{{ asset('icons/artigos.svg') }}" class="w-6 h-6">
+    </a>
+
+    <a href="{{ route('questionario.edit') }}"
+       class="relative group flex flex-col items-center active:scale-90 transition">
+        <span class="
+            absolute -top-8
+            bg-[#E8A8B5] text-[#5a0018]
+            text-[10px] tracking-wide
+            px-2 py-0.5 rounded-md
+            whitespace-nowrap
+            opacity-0 group-hover:opacity-100
+            transition-opacity duration-200
+            pointer-events-none
+        ">Questionário</span>
+        <img src="{{ asset('icons/questionario.svg') }}" class="w-6 h-6">
+    </a>
+
+    <a href="{{ route('profile.edit') }}"
+       class="relative group flex flex-col items-center active:scale-90 transition">
+        <span class="
+            absolute -top-8
+            bg-[#E8A8B5] text-[#5a0018]
+            text-[10px] tracking-wide
+            px-2 py-0.5 rounded-md
+            whitespace-nowrap
+            opacity-0 group-hover:opacity-100
+            transition-opacity duration-200
+            pointer-events-none
+        ">Perfil</span>
+        <img src="{{ asset('icons/perfil.svg') }}" class="w-6 h-6">
+    </a>
+
+</nav>
 
 </body>
 </html>
