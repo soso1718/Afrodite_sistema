@@ -21,7 +21,7 @@
         {{-- Logo --}}
         <div class="mb-6">
             <img
-                src="{{ asset('images/logo-afrodite.png') }}"
+                src="{{ asset('images/logo-afrodite.jpeg') }}"
                 alt="Afrodite"
                 class="w-28 h-auto object-contain"
             >
