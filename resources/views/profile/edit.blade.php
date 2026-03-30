@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sansita+One&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'DM Sans', sans-serif; }
@@ -138,6 +139,24 @@
             <div class="w-full bg-[#B23A48] rounded-2xl p-4 shadow-xl text-white">
                 <h2 class="text-[10px] tracking-[0.12em] uppercase text-white/50 mb-3">Zona de perigo</h2>
                 @include('profile.partials.delete-user-form')
+                
+
+                <div class="w-full h-px bg-white/10 my-4"></div>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="font-display w-full block text-center
+                                bg-white/10 hover:bg-white/20
+                                border border-white/20
+                                text-white/80 hover:text-white
+                                py-3 rounded-lg text-sm tracking-wide
+                                active:scale-95 transition-all duration-200">
+                            Sair da conta
+                        </button>
+                    </form>
+                </div>
+                
             </div>
 
         </div>
