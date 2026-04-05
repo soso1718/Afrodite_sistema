@@ -112,30 +112,74 @@
 
     </div>
 
-    {{-- Navbar --}}
-    <nav class="fixed bottom-0 left-1/2 -translate-x-1/2
-                w-full min-w-[320px] max-w-sm
-                bg-[#720026]
-                flex justify-around items-center
-                py-3 z-50">
+   {{-- Navbar --}}
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2
+            w-full min-w-[320px] max-w-sm
+            bg-[#720026]
+            flex justify-around items-center
+            py-3 z-50">
 
-        <a href="{{ route('dashboard') }}" class="active:scale-90 transition">
-            <img src="{{ asset('icons/casa.svg') }}" class="w-6 h-6">
-        </a>
+    <a href="{{ route('dashboard') }}"
+       class="relative group flex flex-col items-center active:scale-90 transition">
+        <span class="
+            absolute -top-8
+            bg-[#E8A8B5] text-[#5a0018]
+            text-[10px] tracking-wide
+            px-2 py-0.5 rounded-md
+            whitespace-nowrap
+            opacity-0 group-hover:opacity-100
+            transition-opacity duration-200
+            pointer-events-none
+        ">Início</span>
+        <img src="{{ asset('icons/casa.svg') }}" class="w-6 h-6">
+    </a>
 
-        <a href="{{ route('artigos.index') }}" class="active:scale-90 transition">
-            <img src="{{ asset('icons/artigos.svg') }}" class="w-6 h-6">
-        </a>
+    <a href="{{ route('registros.index') }}"
+       class="relative group flex flex-col items-center active:scale-90 transition">
+        <span class="
+            absolute -top-8
+            bg-[#E8A8B5] text-[#5a0018]
+            text-[10px] tracking-wide
+            px-2 py-0.5 rounded-md
+            whitespace-nowrap
+            opacity-0 group-hover:opacity-100
+            transition-opacity duration-200
+            pointer-events-none
+        ">Registros</span>
+        <img src="{{ asset('icons/registro.svg') }}" class="w-6 h-6">
+    </a>
 
-        <a href="{{ route('questionario.edit') }}" class="active:scale-90 transition">
-            <img src="{{ asset('icons/questionario.svg') }}" class="w-6 h-6">
-        </a>
+    <a href="{{ route('artigos.index') }}"
+       class="relative group flex flex-col items-center active:scale-90 transition">
+        <span class="
+            absolute -top-8
+            bg-[#E8A8B5] text-[#5a0018]
+            text-[10px] tracking-wide
+            px-2 py-0.5 rounded-md
+            whitespace-nowrap
+            opacity-0 group-hover:opacity-100
+            transition-opacity duration-200
+            pointer-events-none
+        ">Artigos</span>
+        <img src="{{ asset('icons/artigos.svg') }}" class="w-6 h-6">
+    </a>
 
-        <a href="{{ route('profile.edit') }}" class="active:scale-90 transition">
-            <img src="{{ asset('icons/perfil.svg') }}" class="w-6 h-6">
-        </a>
+    <a href="{{ route('profile.edit') }}"
+       class="relative group flex flex-col items-center active:scale-90 transition">
+        <span class="
+            absolute -top-8
+            bg-[#E8A8B5] text-[#5a0018]
+            text-[10px] tracking-wide
+            px-2 py-0.5 rounded-md
+            whitespace-nowrap
+            opacity-0 group-hover:opacity-100
+            transition-opacity duration-200
+            pointer-events-none
+        ">Perfil</span>
+        <img src="{{ asset('icons/perfil.svg') }}" class="w-6 h-6">
+    </a>
 
-    </nav>
+</nav>
 
 </body>
 </html>
