@@ -45,6 +45,8 @@
                 @csrf
                 @method('PUT')
 
+                <div class="w-full h-px bg-white/10"></div>
+
                 {{-- IDADE --}}
                 <label class="text-sm">Idade</label>
                 <input
@@ -55,6 +57,8 @@
                     min="10" max="99"
                     class="w-full rounded-md p-2 text-black text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A8B5]"
                 >
+
+                <div class="w-full h-px bg-white/10"></div>
 
                 {{-- CICLO --}}
                 <p class="text-sm">Seu ciclo menstrual é regular?</p>
@@ -67,6 +71,8 @@
                         </label>
                     @endforeach
                 </div>
+
+                <div class="w-full h-px bg-white/10"></div>
 
                 {{-- DATA --}}
                 <p class="text-sm">Quando foi sua última menstruação?</p>
@@ -81,6 +87,8 @@
                         {{ old('respostas.dataUltimaMenstruacaoNaoSei', $resposta->data_ultima_menstruacao == 'nao_sei') ? 'checked' : '' }}>
                     Não sei
                 </label>
+
+                <div class="w-full h-px bg-white/10"></div>
 
                 {{-- OBJETIVO --}}
                 <p class="text-sm">Qual seu objetivo com nosso app?</p>
@@ -109,6 +117,8 @@
                     class="w-full rounded-md p-2 text-black text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A8B5]"
                 >
 
+                <div class="w-full h-px bg-white/10"></div>
+
                 {{-- SAÚDE --}}
                 <p class="text-sm">Há algo de importante sobre sua saúde?</p>
                 <input
@@ -118,6 +128,13 @@
                     value="{{ old('respostas.saudeImportante', $resposta->saude_importante) }}"
                     class="w-full rounded-md p-2 text-black text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A8B5]"
                 >
+                <label class="flex items-center gap-2 text-sm">
+                    <input type="checkbox" name="respostas[saudeNada]" value="1"
+                        {{ old('respostas.saudeNada') ? 'checked' : '' }}>
+                    Não há nada
+                </label>
+
+                <div class="w-full h-px bg-white/10"></div>
 
                 {{-- HORMÔNIOS --}}
                 <p class="text-sm">Você está em uso de hormônios?</p>
@@ -130,6 +147,8 @@
                         </label>
                     @endforeach
                 </div>
+
+                
 
                 {{-- TIPO --}}
                 <p class="text-sm">Se sim, qual o tipo de hormônio(s)?</p>
@@ -145,9 +164,11 @@
                 >
                 <label class="flex items-center gap-2 text-sm">
                     <input type="checkbox" name="respostas[hormoniosTipoNenhum]" value="1"
-                        {{ old('respostas.hormoniosTipoNenhum') ? 'checked' : '' }}>
+                        {{ old('respostas.hormoniosTipoNenhum', empty($resposta->hormonios_tipo)) ? 'checked' : '' }}>
                     Não utilizo nenhum
                 </label>
+
+                <div class="w-full h-px bg-white/10"></div>
 
                 {{-- BOTÕES --}}
                 <div class="flex gap-3 mt-2">

@@ -50,6 +50,8 @@
             >
                 @csrf
 
+                <div class="w-full h-px bg-white/10"></div>
+
                 {{-- IDADE --}}
                 <label class="text-sm">Idade</label>
                 <input
@@ -60,6 +62,8 @@
                     min="10" max="99"
                     class="w-full rounded-md p-2 text-black text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A8B5]"
                 >
+
+                <div class="w-full h-px bg-white/10"></div>
 
                 {{-- CICLO --}}
                 <p class="text-sm">Seu ciclo menstrual é regular?</p>
@@ -72,6 +76,8 @@
                         </label>
                     @endforeach
                 </div>
+
+                <div class="w-full h-px bg-white/10"></div>
 
                 {{-- DATA --}}
                 <p class="text-sm">Quando foi sua última menstruação?</p>
@@ -86,6 +92,8 @@
                         {{ old('respostas.dataUltimaMenstruacaoNaoSei') ? 'checked' : '' }}>
                     Não sei
                 </label>
+
+                <div class="w-full h-px bg-white/10"></div>
 
                 {{-- OBJETIVO --}}
                 <p class="text-sm">Qual seu objetivo com nosso app?</p>
@@ -111,6 +119,8 @@
                     class="w-full rounded-md p-2 text-black text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A8B5]"
                 >
 
+                <div class="w-full h-px bg-white/10"></div>
+
                 {{-- SAÚDE --}}
                 <p class="text-sm">Há algo de importante sobre sua saúde?</p>
                 <input
@@ -125,6 +135,8 @@
                         {{ old('respostas.saudeNada') ? 'checked' : '' }}>
                     Não há nada
                 </label>
+
+                <div class="w-full h-px bg-white/10"></div>
 
                 {{-- HORMÔNIOS --}}
                 <p class="text-sm">Você está em uso de hormônios?</p>
@@ -152,6 +164,8 @@
                         {{ old('respostas.hormoniosTipoNenhum') ? 'checked' : '' }}>
                     Nenhum
                 </label>
+
+                <div class="w-full h-px bg-white/10"></div>
 
                 {{-- BOTÃO --}}
                 <button
