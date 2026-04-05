@@ -18,11 +18,11 @@ class QuestionarioRequest extends FormRequest
             'respostas.cicloRegular'           => 'required|in:sim,nao,asVezes,nao_sei',
             'respostas.dataUltimaMenstruacao'  => 'nullable|date|required_without:respostas.dataUltimaMenstruacaoNaoSei',
             'respostas.dataUltimaMenstruacaoNaoSei' => 'nullable',
-            'respostas.objetivo'               => 'required|array|min:1',
+            'respostas.objetivo'               => 'required_if:respostas.objetivoOutro,nullable|array|min:1',
             'respostas.objetivoOutro'          => 'nullable|string|max:255',
             'respostas.saudeImportante'        => 'nullable|string|max:1000',
             'respostas.hormonios'              => 'required|in:sim,nao,nao_sei',
-            'respostas.hormoniosTipo'          => 'nullable|array',
+            'respostas.hormoniosTipo'          => 'nullable|string|max:255|required_if:respostas.hormonios,sim',
         ];
     }
 

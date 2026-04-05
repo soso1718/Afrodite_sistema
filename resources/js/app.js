@@ -17,30 +17,53 @@ document.addEventListener('DOMContentLoaded', function() {
             plugins: [dayGridPlugin, interactionPlugin],
             initialView: 'dayGridMonth',
             locale: 'pt-br',
-
-            // ✅ Toolbar compacta — sem botão "today" pra economizar espaço
             headerToolbar: {
                 left: 'prev',
                 center: 'title',
                 right: 'next'
             },
-
             events: '/events',
-            editable: true,
+            editable: false,
             selectable: true,
             dayMaxEvents: true,
             weekends: true,
             height: 'auto',
-            fixedWeekCount: false, // ✅ Remove semanas vazias do final do mês
+            fixedWeekCount: false,
 
-            // ✅ Estiliza cada dia ao renderizar
+            eventDidMount: function(info) {
+                const color = info.event.backgroundColor;
+                const el = info.el;
+
+                el.style.borderRadius = '4px';
+                el.style.border = 'none';
+                el.style.opacity = '1';
+
+                const titleEl = el.querySelector('.fc-event-title');
+                if (titleEl) titleEl.style.display = 'none';
+
+                const timeEl = el.querySelector('.fc-event-time');
+                if (timeEl) timeEl.style.display = 'none';
+
+                const dayEl = info.el.closest('.fc-daygrid-day');
+                if (dayEl && !dayEl.querySelector('.ciclo-dot')) {
+                    const dot = document.createElement('div');
+                    dot.className = 'ciclo-dot';
+                    dot.style.cssText = `
+                        width: 6px;
+                        height: 6px;
+                        border-radius: 50%;
+                        background: ${color};
+                        margin: 0 auto 3px;
+                        box-shadow: 0 0 6px ${color};
+                    `;
+                    dayEl.querySelector('.fc-daygrid-day-frame').appendChild(dot);
+                }
+            },
+
             dayCellDidMount: function(info) {
                 const cell = info.el;
-
-                // Estilo base da célula
                 cell.style.transition = 'background 0.2s ease';
 
-                // Hover via JS
                 cell.addEventListener('mouseenter', () => {
                     if (!cell.classList.contains('fc-day-today')) {
                         cell.style.background = 'rgba(232, 168, 181, 0.12)';
@@ -68,19 +91,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        calendar.addEvent({
-                            start: dataSelecionada,
-                            display: 'background',
-                            color: '#f87171'
-                        });
+                        var inicio = new Date(dataSelecionada);
 
-                        // ✅ Animação de feedback no clique
+                        // Menstruação — 7 dias em vermelho
+                        for (let i = 0; i < 7; i++) {
+                            let d = new Date(inicio);
+                            d.setDate(d.getDate() + i);
+                            adicionarDot(calendar, d.toISOString().split('T')[0], '#f87171');
+                        }
+
+                        // Ovulação — dia 14 em roxo (prioridade)
+                        let ovulacao = new Date(inicio);
+                        ovulacao.setDate(ovulacao.getDate() + 14);
+                        adicionarDot(calendar, ovulacao.toISOString().split('T')[0], '#a78bfa');
+
+                        // Período fértil — pula o dia da ovulação (i === 0)
+                        for (let i = -3; i <= 3; i++) {
+                            if (i === 0) continue; // ✅ ovulação tem prioridade
+                            let d = new Date(ovulacao);
+                            d.setDate(d.getDate() + i);
+                            adicionarDot(calendar, d.toISOString().split('T')[0], '#fbbf24');
+                        }
+
+                        // Animação de feedback
                         const dayEl = info.dayEl;
                         dayEl.style.transform = 'scale(0.92)';
                         dayEl.style.transition = 'transform 0.15s ease';
-                        setTimeout(() => {
-                            dayEl.style.transform = 'scale(1)';
-                        }, 150);
+                        setTimeout(() => { dayEl.style.transform = 'scale(1)'; }, 150);
                     }
                 })
                 .catch(error => console.error('Erro:', error));
@@ -89,9 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         calendar.render();
 
-        // ✅ Aplica estilos nos botões e título após renderizar
         setTimeout(() => {
-            // Título
             const title = calendarEl.querySelector('.fc-toolbar-title');
             if (title) {
                 title.style.fontFamily = "'Sansita One', cursive";
@@ -99,7 +134,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 title.style.fontSize = '15px';
             }
 
-            // Botões prev/next
             calendarEl.querySelectorAll('.fc-button').forEach(btn => {
                 btn.style.background = 'rgba(255,255,255,0.1)';
                 btn.style.border = '1px solid rgba(255,255,255,0.15)';
@@ -110,7 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 btn.style.padding = '4px 10px';
             });
 
-            // Cabeçalho dos dias (Dom, Seg...)
             calendarEl.querySelectorAll('.fc-col-header-cell-cushion').forEach(el => {
                 el.style.color = 'rgba(255,255,255,0.45)';
                 el.style.fontSize = '10px';
@@ -118,7 +151,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 el.style.letterSpacing = '1px';
             });
 
-            // Números dos dias
             calendarEl.querySelectorAll('.fc-daygrid-day-number').forEach(el => {
                 el.style.color = 'rgba(255,255,255,0.8)';
                 el.style.fontSize = '12px';
@@ -126,3 +158,31 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 50);
     }
 });
+
+function adicionarDot(calendar, dateStr, color) {
+    calendar.addEvent({
+        start: dateStr,
+        display: 'background',
+        backgroundColor: color,
+        borderColor: color,
+    });
+
+    setTimeout(() => {
+        const dayEls = document.querySelectorAll('.fc-daygrid-day');
+        dayEls.forEach(dayEl => {
+            if (dayEl.getAttribute('data-date') === dateStr && !dayEl.querySelector('.ciclo-dot')) {
+                const dot = document.createElement('div');
+                dot.className = 'ciclo-dot';
+                dot.style.cssText = `
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: ${color};
+                    margin: 0 auto 3px;
+                    box-shadow: 0 0 6px ${color};
+                `;
+                dayEl.querySelector('.fc-daygrid-day-frame').appendChild(dot);
+            }
+        });
+    }, 30);
+}

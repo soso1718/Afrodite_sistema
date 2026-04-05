@@ -33,7 +33,7 @@
         {{-- Card --}}
         <div class="w-full bg-[#B23A48] rounded-2xl p-5 shadow-xl text-white">
 
-            <h1 class="font-display text-2xl text-center mb-1">Bem-vinda!</h1>
+            <h1 class="font-display text-2xl text-center mb-1">Bem-vindo!</h1>
             <p class="text-center text-xs text-white/60 mb-5">
                 Não tem uma conta?
                 <a href="{{ route('register') }}"
