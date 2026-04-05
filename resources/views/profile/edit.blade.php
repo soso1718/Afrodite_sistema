@@ -87,16 +87,23 @@
                     <div class="flex flex-col gap-0.5">
                         <span class="text-[10px] tracking-widest uppercase text-white/40">Objetivo principal</span>
                         <span class="text-sm text-white">
-                            {{ $resposta->objetivo
-                                ? collect($resposta->objetivo)->map(fn($o) => match ($o) {
-                                    'acompanhar' => 'Acompanhar menstruação',
-                                    'fertilidade' => 'Monitorar fertilidade',
-                                    'sintomas' => 'Entender sintomas do corpo',
-                                    'hormonal' => 'Organizar saúde hormonal',
-                                    default => $o,
-                                })->join(', ')
-                                : '—'
-                            }}
+                            @php
+                                $objetivos = $resposta->objetivo
+                                    ? collect($resposta->objetivo)->map(fn($o) => match ($o) {
+                                        'acompanhar' => 'Acompanhar menstruação',
+                                        'fertilidade' => 'Monitorar fertilidade',
+                                        'sintomas' => 'Entender sintomas do corpo',
+                                        'hormonal' => 'Organizar saúde hormonal',
+                                        default => $o,
+                                    })->all()
+                                    : [];
+
+                                if ($resposta->objetivo_outro) {
+                                    $objetivos[] = $resposta->objetivo_outro;
+                                }
+                            @endphp
+
+                            {{ count($objetivos) ? implode(', ', $objetivos) : '—' }}
                         </span>
                     </div>
 

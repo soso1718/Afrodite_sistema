@@ -134,18 +134,18 @@
                 {{-- TIPO --}}
                 <p class="text-sm">Se sim, qual o tipo de hormônio(s)?</p>
 
-                @php $hormoniosSalvos = old('respostas.hormoniosTipo', $resposta->hormonios_tipo ?? []); @endphp
+                @php $hormoniosSalvo = old('respostas.hormoniosTipo', $resposta->hormonios_tipo ?? ''); @endphp
 
                 <input
                     type="text"
-                    name="respostas[hormoniosTipo][]"
+                    name="respostas[hormoniosTipo]"
                     placeholder="Ex: pílula, DIU hormonal..."
-                    value="{{ is_array($hormoniosSalvos) ? ($hormoniosSalvos[0] ?? '') : '' }}"
+                    value="{{ is_array($hormoniosSalvo) ? ($hormoniosSalvo[0] ?? '') : $hormoniosSalvo }}"
                     class="w-full rounded-md p-2 text-black text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A8B5]"
                 >
                 <label class="flex items-center gap-2 text-sm">
-                    <input type="checkbox" name="respostas[hormoniosTipo][]" value="nenhum"
-                        {{ is_array($hormoniosSalvos) && in_array('nenhum', $hormoniosSalvos) ? 'checked' : '' }}>
+                    <input type="checkbox" name="respostas[hormoniosTipoNenhum]" value="1"
+                        {{ old('respostas.hormoniosTipoNenhum') ? 'checked' : '' }}>
                     Não utilizo nenhum
                 </label>
 
@@ -158,7 +158,7 @@
                         Salvar
                     </button>
                     <a
-                        href="{{ route('dashboard') }}"
+                        href="{{ route('profile.edit') }}"
                         class="flex-1 text-center bg-white/20 text-white py-3 rounded-lg text-sm tracking-wide active:scale-95 transition-transform flex items-center justify-center"
                     >
                         Cancelar

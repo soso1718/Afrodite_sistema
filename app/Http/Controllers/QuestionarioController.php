@@ -72,17 +72,17 @@ class QuestionarioController extends Controller
         }
 
         $resposta->update([
-            'idade'                   => $dados['idade'],
-            'ciclo_regular'           => $dados['cicloRegular'],
-            'data_ultima_menstruacao' => $dados['dataUltimaMenstruacao'],
-            'objetivo'                => $dados['objetivo'],
-            'objetivo_outro'          => $dados['objetivoOutro'],
-            'saude_importante'        => $dados['saudeImportante'],
-            'hormonios'               => $dados['hormonios'],
-            'hormonios_tipo'          => $dados['hormoniosTipo'],
+            'idade'                   => $dados['idade'] ?? null,
+            'ciclo_regular'           => $dados['cicloRegular'] ?? null,
+            'data_ultima_menstruacao' => $dados['dataUltimaMenstruacao'] ?? null,
+            'objetivo'                => $dados['objetivo'] ?? null,
+            'objetivo_outro'          => $dados['objetivoOutro'] ?? null,
+            'saude_importante'        => $dados['saudeImportante'] ?? null,
+            'hormonios'               => $dados['hormonios'] ?? null,
+            'hormonios_tipo'          => $dados['hormoniosTipo'] ?? null,
         ]);
 
-        return redirect('/dashboard')->with('success', 'Questionário atualizado com sucesso!');
+        return redirect()->route('profile.edit')->with('success', 'Questionário atualizado com sucesso!');
     }
 
 }
