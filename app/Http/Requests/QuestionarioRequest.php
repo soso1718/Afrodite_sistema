@@ -22,8 +22,7 @@ class QuestionarioRequest extends FormRequest
             'respostas.objetivoOutro'               => 'nullable|string|max:255',
             'respostas.saudeImportante'             => 'nullable|string|max:1000',
             'respostas.hormonios'                   => 'required|in:sim,nao,nao_sei',
-            'respostas.hormoniosTipo'               => 'nullable|array',
-            'respostas.hormoniosTipo.*'             => 'nullable|string',
+            'respostas.hormoniosTipo'               => 'nullable|string|max:255',
         ];
     }
 
@@ -47,8 +46,8 @@ class QuestionarioRequest extends FormRequest
             'respostas.saudeImportante.max'                    => 'O campo saúde deve ter no máximo 1000 caracteres.',
             'respostas.hormonios.required'                     => 'Informe se você utiliza hormônios.',
             'respostas.hormonios.in'                           => 'Selecione uma opção válida para hormônios.',
-            'respostas.hormoniosTipo.array'                    => 'O campo tipo de hormônio é inválido.',
-            'respostas.hormoniosTipo.*.string'                 => 'Cada tipo de hormônio deve ser um texto válido.',
+            'respostas.hormoniosTipo.string'                   => 'O campo tipo de hormônio deve ser um texto.',
+            'respostas.hormoniosTipo.max'                      => 'O campo tipo de hormônio deve ter no máximo 255 caracteres.',
         ];
     }
 }

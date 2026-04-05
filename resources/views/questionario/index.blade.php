@@ -88,7 +88,7 @@
                 </label>
 
                 {{-- OBJETIVO --}}
-                <p class="text-sm">Qual seu objetivo?</p>
+                <p class="text-sm">Qual seu objetivo com nosso app?</p>
                 <div class="flex flex-col gap-2">
                     @foreach([
                         'acompanhar' => 'Acompanhar ciclo',
@@ -112,7 +112,7 @@
                 >
 
                 {{-- SAÚDE --}}
-                <p class="text-sm">Algo importante sobre sua saúde?</p>
+                <p class="text-sm">Há algo de importante sobre sua saúde?</p>
                 <input
                     type="text"
                     name="respostas[saudeImportante]"
@@ -127,7 +127,7 @@
                 </label>
 
                 {{-- HORMÔNIOS --}}
-                <p class="text-sm">Você usa hormônios?</p>
+                <p class="text-sm">Você está em uso de hormônios?</p>
                 <div class="flex flex-col gap-2">
                     @foreach(['sim' => 'Sim', 'nao' => 'Não', 'nao_sei' => 'Não sei'] as $val => $label)
                         <label class="flex items-center gap-2 text-sm">
@@ -139,7 +139,7 @@
                 </div>
 
                 {{-- TIPO --}}
-                <p class="text-sm">Qual hormônio?</p>
+                <p class="text-sm">Se sim, qual o tipo de hormônio(s)?</p>
                 <input
                     type="text"
                     name="respostas[hormoniosTipo]"

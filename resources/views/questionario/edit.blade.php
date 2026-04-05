@@ -69,7 +69,7 @@
                 </div>
 
                 {{-- DATA --}}
-                <p class="text-sm">Quando foi a data da sua última menstruação?</p>
+                <p class="text-sm">Quando foi sua última menstruação?</p>
                 <input
                     type="date"
                     name="respostas[dataUltimaMenstruacao]"
@@ -132,7 +132,7 @@
                 </div>
 
                 {{-- TIPO --}}
-                <p class="text-sm">Se sim, qual o tipo de hormônio?</p>
+                <p class="text-sm">Se sim, qual o tipo de hormônio(s)?</p>
 
                 @php $hormoniosSalvos = old('respostas.hormoniosTipo', $resposta->hormonios_tipo ?? []); @endphp
 
@@ -191,6 +191,21 @@
         <img src="{{ asset('icons/casa.svg') }}" class="w-6 h-6">
     </a>
 
+    <a href="{{ route('registros.index') }}"
+        class="relative group flex flex-col items-center active:scale-90 transition">
+            <span class="
+                absolute -top-8
+                bg-[#E8A8B5] text-[#5a0018]
+                text-[10px] tracking-wide
+                px-2 py-0.5 rounded-md
+                whitespace-nowrap
+                opacity-0 group-hover:opacity-100
+                transition-opacity duration-200
+                pointer-events-none
+            ">Registros</span>
+            <img src="{{ asset('icons/registro.svg') }}" class="w-6 h-6">
+        </a>
+
     <a href="{{ route('artigos.index') }}"
        class="relative group flex flex-col items-center active:scale-90 transition">
         <span class="
@@ -204,21 +219,6 @@
             pointer-events-none
         ">Artigos</span>
         <img src="{{ asset('icons/artigos.svg') }}" class="w-6 h-6">
-    </a>
-
-    <a href="{{ route('questionario.edit') }}"
-       class="relative group flex flex-col items-center active:scale-90 transition">
-        <span class="
-            absolute -top-8
-            bg-[#E8A8B5] text-[#5a0018]
-            text-[10px] tracking-wide
-            px-2 py-0.5 rounded-md
-            whitespace-nowrap
-            opacity-0 group-hover:opacity-100
-            transition-opacity duration-200
-            pointer-events-none
-        ">Questionário</span>
-        <img src="{{ asset('icons/questionario.svg') }}" class="w-6 h-6">
     </a>
 
     <a href="{{ route('profile.edit') }}"
