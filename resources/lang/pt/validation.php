@@ -13,6 +13,7 @@ return [
     |
     */
 
+    'current_password'     => 'A senha informada não confere com a senha atual.',
     'accepted'             => 'O campo :attribute deve ser aceito.',
     'active_url'           => 'O campo :attribute não é uma URL válida.',
     'after'                => 'O campo :attribute deve ser uma data posterior a :date.',
@@ -95,6 +96,7 @@ return [
     'custom' => [
         'password' => [
             'min' => 'A senha deve ter pelo menos :min caracteres.',
+
         ],
     ],
 
