@@ -9,6 +9,9 @@
     <style>
         body { font-family: 'DM Sans', sans-serif; }
         .font-display { font-family: 'Sansita One', cursive; }
+        [x-data] > div[style*="z-index"] {
+            overflow: hidden !important;
+        }
     </style>
     <title>Afrodite — Perfil</title>
 </head>

@@ -21,6 +21,21 @@
         .fc .fc-day-today .fc-daygrid-day-number { color: #E8A8B5 !important; font-weight: 500; }
         .fc-theme-standard td, .fc-theme-standard th { border-color: rgba(255,255,255,0.07) !important; }
         .fc-theme-standard .fc-scrollgrid { border-color: rgba(255,255,255,0.07) !important; }
+        .fc-theme-standard .fc-col-header-cell,
+        .fc-theme-standard .fc-col-header,
+        .fc-theme-standard th {
+            background: transparent !important;
+            background-color: transparent !important;
+            border-color: rgba(255,255,255,0.07) !important;
+        }
+
+        .fc .fc-col-header-cell-cushion {
+            color: rgba(255,255,255,0.45) !important;
+            font-size: 10px !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            text-decoration: none !important;
+        }
     </style>
     <title>Afrodite — Calendário</title>
 </head>
