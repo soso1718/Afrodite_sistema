@@ -112,16 +112,6 @@
                     Entrar
                 </button>
 
-                {{-- Esqueceu a senha --}}
-                @if (Route::has('password.request'))
-                    <a
-                        href="{{ route('password.request') }}"
-                        class="text-center text-xs text-white/50 hover:text-[#E8A8B5] transition underline underline-offset-2"
-                    >
-                        Esqueceu sua senha?
-                    </a>
-                @endif
-
             </form>
         </div>
 
