@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sansita+One&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
@@ -25,6 +26,8 @@
 </head>
 
 <body class="flex justify-center bg-[#1a0009] min-h-screen">
+
+<x-phone-frame>
 
     <div class="w-full min-w-[320px] max-w-sm min-h-screen overflow-x-hidden
                 bg-gradient-to-b from-[#720026] via-[#900131] to-[#D80048]
@@ -60,81 +63,42 @@
         {{-- Calendário --}}
         <div class="w-full bg-[#B23A48] rounded-2xl p-4 shadow-xl">
             <h2 class="text-[10px] tracking-[0.12em] uppercase text-white/50 mb-3">Marque os dias</h2>
-            <div id="calendar"></div>
+            <div id="calendar" class="min-h-[300px]"></div>
         </div>
 
     </div>
 
-        {{-- Navbar --}}
-        <nav class="fixed bottom-0 left-1/2 -translate-x-1/2
-                w-full min-w-[320px] max-w-sm
-                bg-[#720026]
-                flex justify-around items-center
-                py-3 z-50">
+    {{-- ───── NAVBAR ───── --}}
+    <x-slot name="navbar">
+        <nav class="w-full bg-[#720026] flex justify-around items-center py-3">
 
-        <a href="{{ route('dashboard') }}"
-        class="relative group flex flex-col items-center active:scale-90 transition">
-            <span class="
-                absolute -top-8
-                bg-[#E8A8B5] text-[#5a0018]
-                text-[10px] tracking-wide
-                px-2 py-0.5 rounded-md
-                whitespace-nowrap
-                opacity-0 group-hover:opacity-100
-                transition-opacity duration-200
-                pointer-events-none
-            ">Início</span>
-            <img src="{{ asset('icons/casa.svg') }}" class="w-6 h-6">
-        </a>
+            <a href="{{ route('dashboard') }}"
+               class="relative group flex flex-col items-center active:scale-90 transition">
+                <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Início</span>
+                <img src="{{ asset('icons/casa.svg') }}" class="w-6 h-6">
+            </a>
 
-        <a href="{{ route('registros.index') }}"
-        class="relative group flex flex-col items-center active:scale-90 transition">
-            <span class="
-                absolute -top-8
-                bg-[#E8A8B5] text-[#5a0018]
-                text-[10px] tracking-wide
-                px-2 py-0.5 rounded-md
-                whitespace-nowrap
-                opacity-0 group-hover:opacity-100
-                transition-opacity duration-200
-                pointer-events-none
-            ">Registros</span>
-            <img src="{{ asset('icons/registro.svg') }}" class="w-6 h-6">
-        </a>
+            <a href="{{ route('registros.index') }}"
+               class="relative group flex flex-col items-center active:scale-90 transition">
+                <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Registros</span>
+                <img src="{{ asset('icons/registro.svg') }}" class="w-6 h-6">
+            </a>
 
-        <a href="{{ route('artigos.index') }}"
-        class="relative group flex flex-col items-center active:scale-90 transition">
-            <span class="
-                absolute -top-8
-                bg-[#E8A8B5] text-[#5a0018]
-                text-[10px] tracking-wide
-                px-2 py-0.5 rounded-md
-                whitespace-nowrap
-                opacity-0 group-hover:opacity-100
-                transition-opacity duration-200
-                pointer-events-none
-            ">Artigos</span>
-            <img src="{{ asset('icons/artigos.svg') }}" class="w-6 h-6">
-        </a>
+            <a href="{{ route('artigos.index') }}"
+               class="relative group flex flex-col items-center active:scale-90 transition">
+                <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Artigos</span>
+                <img src="{{ asset('icons/artigos.svg') }}" class="w-6 h-6">
+            </a>
 
-        <a href="{{ route('profile.edit') }}"
-        class="relative group flex flex-col items-center active:scale-90 transition">
-            <span class="
-                absolute -top-8
-                bg-[#E8A8B5] text-[#5a0018]
-                text-[10px] tracking-wide
-                px-2 py-0.5 rounded-md
-                whitespace-nowrap
-                opacity-0 group-hover:opacity-100
-                transition-opacity duration-200
-                pointer-events-none
-            ">Perfil</span>
-            <img src="{{ asset('icons/perfil.svg') }}" class="w-6 h-6">
-        </a>
+            <a href="{{ route('profile.edit') }}"
+               class="relative group flex flex-col items-center active:scale-90 transition">
+                <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Perfil</span>
+                <img src="{{ asset('icons/perfil.svg') }}" class="w-6 h-6">
+            </a>
 
-    </nav>
+        </nav>
+    </x-slot>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+</x-phone-frame>
 </body>
 </html>

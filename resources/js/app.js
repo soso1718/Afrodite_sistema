@@ -10,7 +10,19 @@ window.Alpine = Alpine;
 Alpine.start();
 
 document.addEventListener('DOMContentLoaded', function() {
-    const calendarEl = document.getElementById('calendar');
+
+    // ✅ CORREÇÃO DEFINITIVA: pega o #calendar que está dentro do container visível
+    // O phone-frame renderiza o slot duas vezes (mobile e desktop), então
+    // precisamos achar o que não está dentro de um sm:hidden
+    function getCalendarVisivel() {
+        const todos = document.querySelectorAll('#calendar');
+        for (const el of todos) {
+            if (el.offsetParent !== null) return el; // offsetParent é null se o elemento estiver oculto
+        }
+        return todos[0]; // fallback
+    }
+
+    const calendarEl = getCalendarVisivel();
 
     if (calendarEl) {
         const calendar = new Calendar(calendarEl, {
@@ -107,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         // Período fértil — pula o dia da ovulação (i === 0)
                         for (let i = -3; i <= 3; i++) {
-                            if (i === 0) continue; // ✅ ovulação tem prioridade
+                            if (i === 0) continue;
                             let d = new Date(ovulacao);
                             d.setDate(d.getDate() + i);
                             adicionarDot(calendar, d.toISOString().split('T')[0], '#fbbf24');
@@ -127,13 +139,6 @@ document.addEventListener('DOMContentLoaded', function() {
         calendar.render();
 
         setTimeout(() => {
-            const title = calendarEl.querySelector('.fc-toolbar-title');
-            if (title) {
-                title.style.fontFamily = "'Sansita One', cursive";
-                title.style.color = '#E8A8B5';
-                title.style.fontSize = '15px';
-            }
-
             calendarEl.querySelectorAll('.fc-button').forEach(btn => {
                 btn.style.background = 'rgba(255,255,255,0.1)';
                 btn.style.border = '1px solid rgba(255,255,255,0.15)';

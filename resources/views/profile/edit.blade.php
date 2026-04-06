@@ -13,43 +13,80 @@
     <title>Afrodite — Perfil</title>
 </head>
 
-<body class="flex justify-center bg-[#1a0009] min-h-screen">
+<body class="bg-[#1a0009]">
 
-    {{-- Toast de sucesso --}}
-    @if (session('success'))
-        <div
-            x-data="{ show: true }"
-            x-init="setTimeout(() => show = false, 10000)"
-            x-show="show"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 -translate-y-4"
-            x-transition:enter-end="opacity-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 translate-y-0"
-            x-transition:leave-end="opacity-0 -translate-y-4"
-            class="fixed top-4 left-1/2 -translate-x-1/2
-                   w-[90%] max-w-sm z-50
-                   bg-[#E8A8B5] text-[#5a0018]
-                   rounded-xl px-4 py-3 shadow-xl
-                   flex items-center justify-between gap-3"
-        >
-            <div class="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                <span class="text-sm font-medium">{{ session('success') }}</span>
+<x-phone-frame>
+
+    {{-- ───── TOAST ───── --}}
+    @php
+        $toastMsg = session('success')
+            ?? (session('status') === 'profile-updated' ? 'Informações atualizadas com sucesso!' : null)
+            ?? (session('status') === 'password-updated' ? 'Senha atualizada com sucesso!' : null);
+    @endphp
+
+    @if($toastMsg)
+        <x-slot name="toast">
+            <div
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 -translate-y-2"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 translate-y-0"
+                x-transition:leave-end="opacity-0 -translate-y-2"
+                class="w-full bg-[#E8A8B5] text-[#5a0018]
+                    rounded-xl px-4 py-3 shadow-xl
+                    flex items-center justify-between gap-3"
+            >
+                <div class="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span class="text-sm font-medium">{{ $toastMsg }}</span>
+                </div>
+                <button @click="show = false" class="text-[#5a0018]/60 hover:text-[#5a0018] transition shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
-            <button @click="show = false" class="text-[#5a0018]/60 hover:text-[#5a0018] transition shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
+        </x-slot>
     @endif
 
-    <div class="w-full min-w-[320px] max-w-sm min-h-screen overflow-x-hidden
+    {{-- ───── NAVBAR ───── --}}
+    <x-slot name="navbar">
+        <nav class="w-full bg-[#720026] flex justify-around items-center py-3">
+
+            <a href="{{ route('dashboard') }}"
+               class="relative group flex flex-col items-center active:scale-90 transition">
+                <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Início</span>
+                <img src="{{ asset('icons/casa.svg') }}" class="w-6 h-6">
+            </a>
+
+            <a href="{{ route('registros.index') }}"
+               class="relative group flex flex-col items-center active:scale-90 transition">
+                <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Registros</span>
+                <img src="{{ asset('icons/registro.svg') }}" class="w-6 h-6">
+            </a>
+
+            <a href="{{ route('artigos.index') }}"
+               class="relative group flex flex-col items-center active:scale-90 transition">
+                <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Artigos</span>
+                <img src="{{ asset('icons/artigos.svg') }}" class="w-6 h-6">
+            </a>
+
+            <a href="{{ route('profile.edit') }}"
+               class="relative group flex flex-col items-center active:scale-90 transition">
+                <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Perfil</span>
+                <img src="{{ asset('icons/perfil.svg') }}" class="w-6 h-6">
+            </a>
+
+        </nav>
+    </x-slot>
+
+    {{-- ───── CONTEÚDO ───── --}}
+    <div class="w-full min-h-full
                 bg-gradient-to-b from-[#720026] via-[#900131] to-[#D80048]
-                flex flex-col px-8 pt-9 pb-20">
+                flex flex-col px-8 pt-9 pb-6">
 
         {{-- Header --}}
         <div class="mb-5">
@@ -134,7 +171,6 @@
                                     $objetivos[] = $resposta->objetivo_outro;
                                 }
                             @endphp
-
                             {{ count($objetivos) ? implode(', ', $objetivos) : '—' }}
                         </span>
                     </div>
@@ -198,38 +234,7 @@
         </div>
     </div>
 
-    {{-- Navbar --}}
-    <nav class="fixed bottom-0 left-1/2 -translate-x-1/2
-                w-full min-w-[320px] max-w-sm
-                bg-[#720026]
-                flex justify-around items-center
-                py-3 z-50">
-
-        <a href="{{ route('dashboard') }}"
-           class="relative group flex flex-col items-center active:scale-90 transition">
-            <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Início</span>
-            <img src="{{ asset('icons/casa.svg') }}" class="w-6 h-6">
-        </a>
-
-        <a href="{{ route('registros.index') }}"
-           class="relative group flex flex-col items-center active:scale-90 transition">
-            <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Registros</span>
-            <img src="{{ asset('icons/registro.svg') }}" class="w-6 h-6">
-        </a>
-
-        <a href="{{ route('artigos.index') }}"
-           class="relative group flex flex-col items-center active:scale-90 transition">
-            <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Artigos</span>
-            <img src="{{ asset('icons/artigos.svg') }}" class="w-6 h-6">
-        </a>
-
-        <a href="{{ route('profile.edit') }}"
-           class="relative group flex flex-col items-center active:scale-90 transition">
-            <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Perfil</span>
-            <img src="{{ asset('icons/perfil.svg') }}" class="w-6 h-6">
-        </a>
-
-    </nav>
+</x-phone-frame>
 
 </body>
 </html>

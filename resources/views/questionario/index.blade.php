@@ -17,6 +17,8 @@
 
 <body class=" flex justify-center bg-[#1a0009]">
 
+<x-phone-frame>
+
     {{--
         Shell mobile:
         - min-w-[320px] → menor celular suportado (iPhone SE, Galaxy A01)
@@ -179,6 +181,8 @@
         </div>
 
     </div>
+
+</x-phone-frame>
 
 </body>
 </html>

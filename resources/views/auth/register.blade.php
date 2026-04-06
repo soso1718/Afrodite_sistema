@@ -14,6 +14,8 @@
 
 <body class="flex justify-center bg-[#1a0009] min-h-screen">
 
+<x-phone-frame>
+
     <div class="w-full min-w-[320px] max-w-sm min-h-screen overflow-x-hidden
                 bg-gradient-to-b from-[#720026] via-[#900131] to-[#D80048]
                 flex flex-col items-center justify-center px-4 py-10">
@@ -141,6 +143,8 @@
         </p>
 
     </div>
+
+</x-phone-frame>
 
 </body>
 </html>

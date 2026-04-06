@@ -8,11 +8,59 @@
     <style>
         body { font-family: 'DM Sans', sans-serif; }
         .font-display { font-family: 'Sansita One', cursive; }
+
+        textarea::-webkit-scrollbar {
+            width: 4px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background: rgba(232,168,181,0.4);
+            border-radius: 10px;
+        }
+        textarea::-webkit-scrollbar-thumb:hover {
+            background: rgba(232,168,181,0.7);
+        }
     </style>
     <title>Afrodite — Editar Artigo</title>
 </head>
 
 <body class="flex justify-center bg-[#1a0009] min-h-screen">
+
+<x-phone-frame>
+
+    {{-- ───── NAVBAR ───── --}}
+    <x-slot name="navbar">
+        <nav class="w-full bg-[#720026] flex justify-around items-center py-3">
+
+            <a href="{{ route('dashboard') }}"
+               class="relative group flex flex-col items-center active:scale-90 transition">
+                <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Início</span>
+                <img src="{{ asset('icons/casa.svg') }}" class="w-6 h-6">
+            </a>
+
+            <a href="{{ route('registros.index') }}"
+               class="relative group flex flex-col items-center active:scale-90 transition">
+                <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Registros</span>
+                <img src="{{ asset('icons/registro.svg') }}" class="w-6 h-6">
+            </a>
+
+            <a href="{{ route('artigos.index') }}"
+               class="relative group flex flex-col items-center active:scale-90 transition">
+                <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Artigos</span>
+                <img src="{{ asset('icons/artigos.svg') }}" class="w-6 h-6">
+            </a>
+
+            <a href="{{ route('profile.edit') }}"
+               class="relative group flex flex-col items-center active:scale-90 transition">
+                <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Perfil</span>
+                <img src="{{ asset('icons/perfil.svg') }}" class="w-6 h-6">
+            </a>
+
+        </nav>
+    </x-slot>
 
     <div class="w-full min-w-[320px] max-w-sm min-h-screen overflow-x-hidden
                 bg-gradient-to-b from-[#720026] via-[#900131] to-[#D80048]
@@ -103,74 +151,7 @@
 
     </div>
 
-   {{-- Navbar --}}
-<nav class="fixed bottom-0 left-1/2 -translate-x-1/2
-            w-full min-w-[320px] max-w-sm
-            bg-[#720026]
-            flex justify-around items-center
-            py-3 z-50">
-
-    <a href="{{ route('dashboard') }}"
-       class="relative group flex flex-col items-center active:scale-90 transition">
-        <span class="
-            absolute -top-8
-            bg-[#E8A8B5] text-[#5a0018]
-            text-[10px] tracking-wide
-            px-2 py-0.5 rounded-md
-            whitespace-nowrap
-            opacity-0 group-hover:opacity-100
-            transition-opacity duration-200
-            pointer-events-none
-        ">Início</span>
-        <img src="{{ asset('icons/casa.svg') }}" class="w-6 h-6">
-    </a>
-
-    <a href="{{ route('registros.index') }}"
-       class="relative group flex flex-col items-center active:scale-90 transition">
-        <span class="
-            absolute -top-8
-            bg-[#E8A8B5] text-[#5a0018]
-            text-[10px] tracking-wide
-            px-2 py-0.5 rounded-md
-            whitespace-nowrap
-            opacity-0 group-hover:opacity-100
-            transition-opacity duration-200
-            pointer-events-none
-        ">Registros</span>
-        <img src="{{ asset('icons/registro.svg') }}" class="w-6 h-6">
-    </a>
-
-    <a href="{{ route('artigos.index') }}"
-       class="relative group flex flex-col items-center active:scale-90 transition">
-        <span class="
-            absolute -top-8
-            bg-[#E8A8B5] text-[#5a0018]
-            text-[10px] tracking-wide
-            px-2 py-0.5 rounded-md
-            whitespace-nowrap
-            opacity-0 group-hover:opacity-100
-            transition-opacity duration-200
-            pointer-events-none
-        ">Artigos</span>
-        <img src="{{ asset('icons/artigos.svg') }}" class="w-6 h-6">
-    </a>
-
-    <a href="{{ route('profile.edit') }}"
-       class="relative group flex flex-col items-center active:scale-90 transition">
-        <span class="
-            absolute -top-8
-            bg-[#E8A8B5] text-[#5a0018]
-            text-[10px] tracking-wide
-            px-2 py-0.5 rounded-md
-            whitespace-nowrap
-            opacity-0 group-hover:opacity-100
-            transition-opacity duration-200
-            pointer-events-none
-        ">Perfil</span>
-        <img src="{{ asset('icons/perfil.svg') }}" class="w-6 h-6">
-    </a>
-
-</nav>
+</x-phone-frame>
 
 </body>
 </html>
