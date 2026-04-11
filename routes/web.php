@@ -6,12 +6,25 @@ use App\Http\Controllers\QuestionarioController;
 use App\Http\Controllers\ArtigoController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\RegistroController;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Resposta;
 
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
 Route::get('/dashboard', function () {
+    $user = Auth::user();
+
+    if ($user->role === 'admin') {
+        return view('dashboard');
+    }
+
+    $jaRespondeu = Resposta::where('user_id', $user->id)->exists();
+    if (!$jaRespondeu) {
+        return redirect()->route('questionario');
+    }
+
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -68,6 +81,7 @@ Route::middleware(['auth', 'admin'])
         Route::resource('artigos', ArtigoController::class)
             ->except(['index', 'show']);
 });
+
 
 
 require __DIR__.'/auth.php';

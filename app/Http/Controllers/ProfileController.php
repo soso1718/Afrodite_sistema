@@ -15,14 +15,22 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): View
-    {
-        $user = $request->user();
+    public function edit(Request $request): View|RedirectResponse
+{
+    $user = $request->user();
 
+    if ($user->role === 'admin') {
+        $resposta = null;
+    } else {
         $resposta = Resposta::where('user_id', $user->id)->first();
 
-        return view('profile.edit', compact('user', 'resposta'));
+        if (!$resposta) {
+            return redirect()->route('questionario');
+        }
     }
+
+    return view('profile.edit', compact('user', 'resposta'));
+}
 
     /**
      * Update the user's profile information.

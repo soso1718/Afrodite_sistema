@@ -18,6 +18,7 @@
 
 <body class="bg-[#1a0009]">
 
+
 <x-phone-frame>
 
     {{-- ───── TOAST ───── --}}
@@ -122,34 +123,48 @@
 
                     <div class="flex flex-col gap-0.5">
                         <span class="text-[10px] tracking-widest uppercase text-white/40">Idade</span>
-                        <span class="text-sm text-white">{{ $resposta->idade }} anos</span>
+                        @if($resposta)
+                            <span class="text-sm text-white">{{ $resposta->idade }} anos</span>
+                        @else
+                            <span class="text-sm text-white">Não aplicável para admin</span>
+                        @endif
                     </div>
+
 
                     <div class="w-full h-px bg-white/10"></div>
 
                     <div class="flex flex-col gap-0.5">
                         <span class="text-[10px] tracking-widest uppercase text-white/40">Ciclo menstrual</span>
                         <span class="text-sm text-white">
-                            @switch($resposta->ciclo_regular)
-                                @case('sim') Regular @break
-                                @case('nao') Irregular @break
-                                @case('asVezes') Às vezes regular @break
-                                @default Não informado
-                            @endswitch
+                            @if($resposta)
+                                @switch($resposta->ciclo_regular)
+                                    @case('sim') Regular @break
+                                    @case('nao') Irregular @break
+                                    @case('asVezes') Às vezes regular @break
+                                    @default Não informado
+                                @endswitch
+                            @else
+                                Não aplicável para admin
+                            @endif
                         </span>
                     </div>
+
 
                     <div class="w-full h-px bg-white/10"></div>
 
                     <div class="flex flex-col gap-0.5">
                         <span class="text-[10px] tracking-widest uppercase text-white/40">Última menstruação</span>
                         <span class="text-sm text-white">
-                            @if($resposta->data_ultima_menstruacao === 'nao_sei')
-                                Não soube informar
-                            @elseif($resposta->data_ultima_menstruacao)
-                                {{ \Carbon\Carbon::parse($resposta->data_ultima_menstruacao)->format('d/m/Y') }}
+                            @if($resposta)
+                                @if($resposta->data_ultima_menstruacao === 'nao_sei')
+                                    Não soube informar
+                                @elseif($resposta->data_ultima_menstruacao)
+                                    {{ \Carbon\Carbon::parse($resposta->data_ultima_menstruacao)->format('d/m/Y') }}
+                                @else
+                                    —
+                                @endif
                             @else
-                                —
+                                Não aplicável para admin
                             @endif
                         </span>
                     </div>
@@ -159,45 +174,62 @@
                     <div class="flex flex-col gap-0.5">
                         <span class="text-[10px] tracking-widest uppercase text-white/40">Objetivo principal</span>
                         <span class="text-sm text-white">
-                            @php
-                                $objetivos = $resposta->objetivo
-                                    ? collect($resposta->objetivo)->map(fn($o) => match ($o) {
-                                        'acompanhar' => 'Acompanhar menstruação',
-                                        'fertilidade' => 'Monitorar fertilidade',
-                                        'sintomas' => 'Entender sintomas do corpo',
-                                        'hormonal' => 'Organizar saúde hormonal',
-                                        default => $o,
-                                    })->all()
-                                    : [];
+                            @if($resposta)
+                                @php
+                                    $objetivos = $resposta->objetivo
+                                        ? collect($resposta->objetivo)->map(fn($o) => match ($o) {
+                                            'acompanhar' => 'Acompanhar menstruação',
+                                            'fertilidade' => 'Monitorar fertilidade',
+                                            'sintomas' => 'Entender sintomas do corpo',
+                                            'hormonal' => 'Organizar saúde hormonal',
+                                            default => $o,
+                                        })->all()
+                                        : [];
 
-                                if ($resposta->objetivo_outro) {
-                                    $objetivos[] = $resposta->objetivo_outro;
-                                }
-                            @endphp
-                            {{ count($objetivos) ? implode(', ', $objetivos) : '—' }}
+                                    if ($resposta->objetivo_outro) {
+                                        $objetivos[] = $resposta->objetivo_outro;
+                                    }
+                                @endphp
+                                {{ count($objetivos) ? implode(', ', $objetivos) : '—' }}
+                            @else
+                                Não aplicável para admin
+                            @endif
                         </span>
                     </div>
+
 
                     <div class="w-full h-px bg-white/10"></div>
 
                     <div class="flex flex-col gap-0.5">
                         <span class="text-[10px] tracking-widests uppercase text-white/40">Saúde</span>
-                        <span class="text-sm text-white">{{ $resposta->saude_importante ?: 'Nada relevante informado' }}</span>
+                        <span class="text-sm text-white">
+                            @if($resposta)
+                                {{ $resposta->saude_importante ?: 'Nada relevante informado' }}
+                            @else
+                                Não aplicável para admin
+                            @endif
+                        </span>
                     </div>
+
 
                     <div class="w-full h-px bg-white/10"></div>
 
                     <div class="flex flex-col gap-0.5">
                         <span class="text-[10px] tracking-widest uppercase text-white/40">Uso de hormônios</span>
                         <span class="text-sm text-white">
-                            @switch($resposta->hormonios)
-                                @case('sim') Sim @break
-                                @case('nao') Não @break
-                                @case('nao_sei') Não soube informar @break
-                                @default —
-                            @endswitch
+                            @if($resposta)
+                                @switch($resposta->hormonios)
+                                    @case('sim') Sim @break
+                                    @case('nao') Não @break
+                                    @case('nao_sei') Não soube informar @break
+                                    @default —
+                                @endswitch
+                            @else
+                                Não aplicável para admin
+                            @endif
                         </span>
                     </div>
+
 
                 </div>
 
