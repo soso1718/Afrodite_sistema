@@ -61,15 +61,15 @@
             <h2 class="text-[10px] tracking-[0.12em] uppercase text-white/50 mb-3">Legenda</h2>
             <div class="flex gap-3 flex-wrap">
                 <div class="flex items-center gap-1.5">
-                    <div class="w-2 h-2 rounded-full bg-[#f87171]"></div>
+                    <div class="w-2 h-2 rounded-full bg-[#f08c8c]"></div>
                     <span class="text-xs text-white/60">Menstruação</span>
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <div class="w-2 h-2 rounded-full bg-[#fbbf24]"></div>
+                    <div class="w-2 h-2 rounded-full bg-[#fc5849]"></div>
                     <span class="text-xs text-white/60">Período fértil</span>
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <div class="w-2 h-2 rounded-full bg-[#a78bfa]"></div>
+                    <div class="w-2 h-2 rounded-full bg-[#e42615]"></div>
                     <span class="text-xs text-white/60">Ovulação</span>
                 </div>
             </div>

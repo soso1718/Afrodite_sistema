@@ -15,10 +15,10 @@ class EventController extends Controller
             ->get()
             ->map(function ($event) {
                 $color = match($event->title) {
-                    'Menstruação'    => '#f87171',
-                    'Ovulação'       => '#a78bfa',
-                    'Período fértil' => '#fbbf24',
-                    default          => '#f87171',
+                    'Menstruação'    => '#f08c8c',
+                    'Ovulação'       => '#e42615',
+                    'Período fértil' => '#fc5849',
+                    default          => '#f08c8c',
                 };
 
                 return [

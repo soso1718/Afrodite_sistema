@@ -109,20 +109,20 @@ document.addEventListener('DOMContentLoaded', function() {
                         for (let i = 0; i < 7; i++) {
                             let d = new Date(inicio);
                             d.setDate(d.getDate() + i);
-                            adicionarDot(calendar, d.toISOString().split('T')[0], '#f87171');
+                            adicionarDot(calendar, d.toISOString().split('T')[0], '#f08c8c');
                         }
 
                         // Ovulação — dia 14 em roxo (prioridade)
                         let ovulacao = new Date(inicio);
                         ovulacao.setDate(ovulacao.getDate() + 14);
-                        adicionarDot(calendar, ovulacao.toISOString().split('T')[0], '#a78bfa');
+                        adicionarDot(calendar, ovulacao.toISOString().split('T')[0], '#e42615');
 
                         // Período fértil — pula o dia da ovulação (i === 0)
                         for (let i = -3; i <= 3; i++) {
                             if (i === 0) continue;
                             let d = new Date(ovulacao);
                             d.setDate(d.getDate() + i);
-                            adicionarDot(calendar, d.toISOString().split('T')[0], '#fbbf24');
+                            adicionarDot(calendar, d.toISOString().split('T')[0], '#fc5849');
                         }
 
                         // Animação de feedback
