@@ -112,7 +112,7 @@
                         <form
                             action="{{ route('admin.artigos.destroy', $artigo->id) }}"
                             method="POST"
-                            onsubmit="return confirm('Tem certeza que deseja excluir este artigo?')"
+                            onsubmit="abrirModal(this); return false;"
                             class="flex-1"
                         >
                             @csrf
@@ -146,6 +146,71 @@
     </div>
 
 </x-phone-frame>
+{{-- ───── MODAL DE CONFIRMAÇÃO ───── --}}
+    <div id="modal-excluir"
+        class="fixed inset-0 z-50 flex items-center justify-center px-8 mx-4"
+        style="display: none !important; background: rgba(0,0,0,0.6);">
 
+        <div style="width: calc(320px - 12px);" class="bg-[#B23A48] rounded-2xl p-6 shadow-2xl text-white">
+
+            <h2 class="font-display text-xl mb-2">Tem certeza que quer deletar este artigo?</h2>
+
+            <p class="text-sm text-white/60 mb-6">
+                Todos os dados serão permanentemente removidos.
+            </p>
+
+            <div class="flex gap-3">
+
+                <button
+                    onclick="fecharModal()"
+                    class="flex-1 font-display text-sm tracking-wide
+                        bg-white/10 border border-white/20
+                        text-white py-3 rounded-xl
+                        active:scale-95 transition-transform"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    id="btn-confirmar"
+                    onclick="confirmarExclusao()"
+                    class="flex-1 font-display text-sm tracking-wide
+                        bg-[#720026] border border-[#E8A8B5]/30
+                        text-[#E8A8B5] py-3 rounded-xl
+                        active:scale-95 transition-transform"
+                >
+                    Confirmar
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let formParaEnviar = null;
+
+        function abrirModal(form) {
+            formParaEnviar = form;
+            const modal = document.getElementById('modal-excluir');
+            modal.style.display = 'flex';
+        }
+
+        function fecharModal() {
+            const modal = document.getElementById('modal-excluir');
+            modal.style.display = 'none';
+            formParaEnviar = null;
+        }
+
+        function confirmarExclusao() {
+            if (formParaEnviar) {
+                formParaEnviar.submit();
+            }
+        }
+
+        // Fecha ao clicar fora do card
+        document.getElementById('modal-excluir').addEventListener('click', function(e) {
+            if (e.target === this) fecharModal();
+        });
+    </script>
 </body>
 </html>
