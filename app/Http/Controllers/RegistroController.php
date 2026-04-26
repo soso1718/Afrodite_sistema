@@ -11,14 +11,26 @@ class RegistroController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $events = Event::where('user_id', auth()->id())
-            ->orderBy('date', 'desc')
-            ->get();
+    public function index(Request $request)
+{
+    $month = $request->input('month', now()->format('Y-m'));
+        $date = \Carbon\Carbon::createFromFormat('Y-m', $month);
 
-        return view('registros.index', compact('events'));
+        // Busca eventos do mês atual
+        $events = Event::where('user_id', auth()->id())
+            ->whereMonth('date', $date->month)
+            ->whereYear('date', $date->year)
+            ->orderBy('date', 'desc')
+            ->paginate(10);
+
+        // Calcula meses anterior e seguinte (sempre ativos)
+        $prevMonth = $date->copy()->subMonth()->format('Y-m');
+        $nextMonth = $date->copy()->addMonth()->format('Y-m');
+
+        return view('registros.index', compact('events', 'date', 'prevMonth', 'nextMonth'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.

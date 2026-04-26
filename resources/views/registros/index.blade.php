@@ -20,31 +20,22 @@
     {{-- ───── NAVBAR ───── --}}
     <x-slot name="navbar">
         <nav class="w-full bg-[#720026] flex justify-around items-center py-3">
-
-            <a href="{{ route('dashboard') }}"
-               class="relative group flex flex-col items-center active:scale-90 transition">
+            <a href="{{ route('dashboard') }}" class="relative group flex flex-col items-center active:scale-90 transition">
                 <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Início</span>
                 <img src="{{ asset('icons/casa.svg') }}" class="w-6 h-6">
             </a>
-
-            <a href="{{ route('registros.index') }}"
-               class="relative group flex flex-col items-center active:scale-90 transition">
+            <a href="{{ route('registros.index') }}" class="relative group flex flex-col items-center active:scale-90 transition">
                 <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Registros</span>
                 <img src="{{ asset('icons/registro.svg') }}" class="w-6 h-6">
             </a>
-
-            <a href="{{ route('artigos.index') }}"
-               class="relative group flex flex-col items-center active:scale-90 transition">
+            <a href="{{ route('artigos.index') }}" class="relative group flex flex-col items-center active:scale-90 transition">
                 <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Artigos</span>
                 <img src="{{ asset('icons/artigos.svg') }}" class="w-6 h-6">
             </a>
-
-            <a href="{{ route('profile.edit') }}"
-               class="relative group flex flex-col items-center active:scale-90 transition">
+            <a href="{{ route('profile.edit') }}" class="relative group flex flex-col items-center active:scale-90 transition">
                 <span class="absolute -top-8 bg-[#E8A8B5] text-[#5a0018] text-[10px] tracking-wide px-2 py-0.5 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">Perfil</span>
                 <img src="{{ asset('icons/perfil.svg') }}" class="w-6 h-6">
             </a>
-
         </nav>
     </x-slot>
 
@@ -60,10 +51,24 @@
 
         <div class="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-4"></div>
 
+        {{-- Navegação de meses (sempre ativa) --}}
+        <div class="mb-4 flex justify-between items-center">
+            <a href="{{ route('registros.index', ['month' => $prevMonth]) }}" class="text-white/70 hover:text-white">
+                ← {{ \Carbon\Carbon::createFromFormat('Y-m', $prevMonth)->translatedFormat('F Y') }}
+            </a>
+
+            <h2 class="text-white font-medium">
+                {{ $date->translatedFormat('F Y') }}
+            </h2>
+
+            <a href="{{ route('registros.index', ['month' => $nextMonth]) }}" class="text-white/70 hover:text-white">
+                {{ \Carbon\Carbon::createFromFormat('Y-m', $nextMonth)->translatedFormat('F Y') }} →
+            </a>
+        </div>
+
         {{-- Tabela de registros --}}
         <div class="w-full bg-[#B23A48] rounded-2xl p-4 shadow-xl">
-
-            <h2 class="text-[10px] tracking-[0.12em] uppercase text-white/50 mb-3">Todos os registros</h2>
+            <h2 class="text-[10px] tracking-[0.12em] uppercase text-white/50 mb-3">Registros do mês</h2>
 
             {{-- Cabeçalho --}}
             <div class="grid grid-cols-2 mb-2 px-1">
@@ -73,20 +78,14 @@
 
             {{-- Linhas --}}
             <div class="flex flex-col gap-2">
-
                 @forelse ($events as $event)
-
                     <div class="grid grid-cols-2 items-center
                                 bg-white/5 hover:bg-white/10
                                 rounded-xl px-3 py-2.5
                                 transition-colors duration-150">
-
-                        {{-- Data --}}
                         <span class="text-sm text-white/80 font-light">
                             {{ \Carbon\Carbon::parse($event->date)->format('d/m/Y') }}
                         </span>
-
-                        {{-- Tipo com badge colorido --}}
                         <span class="flex items-center gap-1.5">
                             @php
                                 $tipo = $event->title;
@@ -100,21 +99,14 @@
                             <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ $dot }}"></span>
                             <span class="text-sm text-white/80 font-light">{{ $tipo }}</span>
                         </span>
-
                     </div>
-
                 @empty
-
                     <div class="text-center text-sm text-white/50 py-6">
-                        Nenhum registro encontrado.
+                        Nenhum registro encontrado neste mês.
                     </div>
-
                 @endforelse
-
             </div>
-
         </div>
-
     </div>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
