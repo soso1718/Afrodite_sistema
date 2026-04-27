@@ -21,7 +21,7 @@ class RegistroController extends Controller
             ->whereMonth('date', $date->month)
             ->whereYear('date', $date->year)
             ->orderBy('date', 'desc')
-            ->paginate(10);
+            ->get();
 
         // Calcula meses anterior e seguinte (sempre ativos)
         $prevMonth = $date->copy()->subMonth()->format('Y-m');
@@ -61,7 +61,8 @@ class RegistroController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $event = Event::where('user_id', auth()->id())->findOrFail($id);
+        return view('registros.edit', compact('event'));
     }
 
     /**
@@ -69,7 +70,17 @@ class RegistroController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $event = Event::where('user_id', auth()->id())->findOrFail($id);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'date'  => 'required|date',
+        ]);
+
+        $event->update($request->only('title','date'));
+
+        return redirect()->route('registros.index')->with('success', 'Registro atualizado!');
+
     }
 
     /**
@@ -77,6 +88,8 @@ class RegistroController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $event = Event::where('user_id', auth()->id())->findOrFail($id);
+        $event->delete();
+        return response()->json(['success' => true]);
     }
 }

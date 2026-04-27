@@ -16,7 +16,6 @@
 <body class="flex justify-center bg-[#1a0009] min-h-screen">
 
 <x-phone-frame>
-
     {{-- ───── NAVBAR ───── --}}
     <x-slot name="navbar">
         <nav class="w-full bg-[#720026] flex justify-around items-center py-3">
@@ -79,27 +78,38 @@
             {{-- Linhas --}}
             <div class="flex flex-col gap-2">
                 @forelse ($events as $event)
-                    <div class="grid grid-cols-2 items-center
-                                bg-white/5 hover:bg-white/10
-                                rounded-xl px-3 py-2.5
-                                transition-colors duration-150">
-                        <span class="text-sm text-white/80 font-light">
-                            {{ \Carbon\Carbon::parse($event->date)->format('d/m/Y') }}
-                        </span>
-                        <span class="flex items-center gap-1.5">
-                            @php
-                                $tipo = $event->title;
-                                $dot = match(true) {
-                                    str_contains($tipo, 'Menstrua') => 'bg-[#f87171]',
-                                    str_contains($tipo, 'Ovula')    => 'bg-[#a78bfa]',
-                                    str_contains($tipo, 'fértil')   => 'bg-[#fbbf24]',
-                                    default                         => 'bg-white/40',
-                                };
-                            @endphp
-                            <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ $dot }}"></span>
-                            <span class="text-sm text-white/80 font-light">{{ $tipo }}</span>
-                        </span>
+                    <div class="grid grid-cols-3 items-center
+                            bg-white/5 hover:bg-white/10
+                            rounded-xl px-3 py-2.5
+                            transition-colors duration-150">
+                    <span class="text-sm text-white/80 font-light">
+                        {{ \Carbon\Carbon::parse($event->date)->format('d/m/Y') }}
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                        @php
+                            $tipo = $event->title;
+                            $dot = match(true) {
+                                str_contains($tipo, 'Menstrua') => 'bg-[#f87171]',
+                                str_contains($tipo, 'Ovula')    => 'bg-[#a78bfa]',
+                                str_contains($tipo, 'fértil')   => 'bg-[#fbbf24]',
+                                default                         => 'bg-white/40',
+                            };
+                        @endphp
+                        <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 {{ $dot }}"></span>
+                        <span class="text-sm text-white/80 font-light">{{ $tipo }}</span>
+                    </span>
+
+                    {{-- Botões de ação --}}
+                    <div class="flex gap-2 justify-end">
+                        <form action="{{ route('registros.destroy', $event->id) }}" method="POST" class="inline delete-form">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-xs text-red-300 hover:text-red-500">Excluir</button>
+                        </form>
+                        <a href="{{ route('registros.edit', $event->id) }}" class="text-xs text-blue-300 hover:text-blue-500">Editar</a>
                     </div>
+                </div>
+
                 @empty
                     <div class="text-center text-sm text-white/50 py-6">
                         Nenhum registro encontrado neste mês.
@@ -112,6 +122,38 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </x-phone-frame>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const forms = document.querySelectorAll('.delete-form');
+    forms.forEach(form => {
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            if (!confirm('Deseja realmente excluir este registro?')) return;
+
+            const response = await fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams(new FormData(this))
+            });
+
+            if (response.ok) {
+                // Atualiza a lista (reload da página)
+                window.location.reload();
+
+                // Atualiza o calendário (se já estiver inicializado)
+                if (window.calendar) {
+                    window.calendar.refetchEvents();
+                }
+            }
+        });
+    });
+});
+</script>
+
 
 </body>
 </html>
