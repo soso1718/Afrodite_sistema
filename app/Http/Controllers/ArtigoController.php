@@ -46,7 +46,7 @@ class ArtigoController extends Controller
         $this->onlyAdmin();
         Artigo::create($request->validated());
 
-        return redirect()->route('artigos.index')->with('success', 'Artigo criado com sucesso!');
+        return redirect()->route('artigos.index')->with('toast', 'Artigo criado com sucesso!');
     }
 
     /**
@@ -77,7 +77,7 @@ class ArtigoController extends Controller
         $artigo = Artigo::findOrFail($id);
         $artigo->update($request->validated());
 
-        return redirect()->route('artigos.index')->with('success', 'Artigo atualizado com sucesso!');
+        return redirect()->route('artigos.index')->with('toast', 'Artigo atualizado com sucesso!');
     }
 
     /**
@@ -89,6 +89,6 @@ class ArtigoController extends Controller
         $artigo = Artigo::findOrFail($id);
         $artigo->delete();
 
-        return redirect()->route('artigos.index')->with('success', 'Artigo deletado com sucesso!');
+        return redirect()->route('artigos.index')->with('toast', 'Artigo deletado com sucesso!');
     }
 }

@@ -29,7 +29,7 @@
 
 <body class="flex justify-center bg-[#1a0009] min-h-screen">
 
-<x-phone-frame>
+<x-phone-frame :toast="session('toast')">
 
     {{-- ───── NAVBAR ───── --}}
     <x-slot name="navbar">

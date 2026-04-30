@@ -69,27 +69,29 @@ class RegistroController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        $event = Event::where('user_id', auth()->id())->findOrFail($id);
+{
+    $event = Event::where('user_id', auth()->id())->findOrFail($id);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'date'  => 'required|date',
-        ]);
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'date'  => 'required|date',
+    ]);
 
-        $event->update($request->only('title','date'));
+    $event->update($request->only('title','date'));
 
-        return redirect()->route('registros.index')->with('success', 'Registro atualizado!');
+    // envia mensagem para o componente
+    return redirect()->route('registros.index')
+                     ->with('toast', 'Registro atualizado com sucesso!');
+}
 
-    }
+public function destroy(string $id)
+{
+    $event = Event::where('user_id', auth()->id())->findOrFail($id);
+    $event->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $event = Event::where('user_id', auth()->id())->findOrFail($id);
-        $event->delete();
-        return response()->json(['success' => true]);
-    }
+    // envia mensagem para o componente
+    return redirect()->route('registros.index')
+                     ->with('toast', 'Registro excluído com sucesso!');
+}
+
 }
