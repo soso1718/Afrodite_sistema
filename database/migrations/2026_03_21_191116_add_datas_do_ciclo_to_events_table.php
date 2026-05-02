@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->toDateString('menstruacao_fim')->nullable();
-            $table->toDateString('periodo_fertil_inicio')->nullable();
-            $table->toDateString('periodo_fertil_fim')->nullable();
-            $table->toDateString('ovulacao')->nullable();
+            $table->date('menstruacao_fim')->nullable();
+            $table->date('periodo_fertil_inicio')->nullable();
+            $table->date('periodo_fertil_fim')->nullable();
+            $table->date('ovulacao')->nullable();
         });
     }
 
