@@ -5,6 +5,17 @@
   },
   "buildAptPackages": [
     "bison",
-    "re2c"
+    "re2c",
+    "libcurl4-openssl-dev",
+    "libreadline-dev",
+    "gettext",
+    "libicu-dev",
+    "libpng-dev",
+    "libjpeg-dev",
+    "libfreetype6-dev",
+    "libgd-dev",
+    "libonig-dev",
+    "libzip-dev",
+    "libpq-dev"
   ]
 }
