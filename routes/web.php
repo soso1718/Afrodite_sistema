@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestionarioController;
 use App\Http\Controllers\ArtigoController;
@@ -17,7 +18,7 @@ Route::get('/dashboard', function () {
     $user = Auth::user();
 
     if ($user->role === 'admin') {
-        return view('dashboard');
+        return redirect()->route('admin.dashboard');
     }
 
     $jaRespondeu = Resposta::where('user_id', $user->id)->exists();
@@ -29,68 +30,47 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Eventos (calendário)
     Route::get('/events', [EventController::class, 'index'])->name('events.index');
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
     Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
     Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+    Route::post('/events/projecoes', [EventController::class, 'storeProjecoes'])->name('events.projecoes');
 
-    // Registros (lista)
-    // Registros (lista)
     Route::get('/registros', [RegistroController::class, 'index'])->name('registros.index');
     Route::get('/registros/{registro}/edit', [RegistroController::class, 'edit'])->name('registros.edit');
     Route::put('/registros/{registro}', [RegistroController::class, 'update'])->name('registros.update');
     Route::delete('/registros/{registro}', [RegistroController::class, 'destroy'])->name('registros.destroy');
 
-
-});
-
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin', function () {
-        return view('admin.dashboard');
-    });
-});
-
-Route::middleware(['auth'])->group(function () {
-
-    Route::get('/questionario', [QuestionarioController::class, 'index'])
-        ->name('questionario');
-
-    Route::post('/questionario', [QuestionarioController::class, 'store'])
-        ->name('questionario.store')
-        ->middleware('auth');
-        
-    Route::get('/questionario/editar', [QuestionarioController::class, 'edit'])
-        ->name('questionario.edit');
-        
-    Route::put('/questionario/update', [QuestionarioController::class, 'update'])
-        ->name('questionario.update');
-
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('/artigos', [ArtigoController::class, 'index'])
-        ->name('artigos.index');
-
+    Route::get('/artigos', [ArtigoController::class, 'index'])->name('artigos.index');
     Route::get('/artigos/{artigo}', [ArtigoController::class, 'show'])
         ->whereNumber('artigo')
         ->name('artigos.show');
-});
 
+    Route::get('/questionario', [QuestionarioController::class, 'index'])->name('questionario');
+    Route::post('/questionario', [QuestionarioController::class, 'store'])->name('questionario.store');
+    Route::get('/questionario/editar', [QuestionarioController::class, 'edit'])->name('questionario.edit');
+    Route::put('/questionario/update', [QuestionarioController::class, 'update'])->name('questionario.update');
+
+});
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
 
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('/questionarios/respostas', [DashboardController::class, 'respostas'])
+            ->name('questionarios.respostas');
+
         Route::resource('artigos', ArtigoController::class)
             ->except(['index', 'show']);
-});
 
-
+    });
 
 require __DIR__.'/auth.php';

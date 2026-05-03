@@ -15,11 +15,16 @@ class EventController extends Controller
             ->get()
             ->map(function ($event) {
                 $color = match($event->title) {
-                    'Menstruação'    => '#f08c8c',
-                    'Ovulação'       => '#e42615',
-                    'Período fértil' => '#fc5849',
-                    default          => '#f08c8c',
+                    'Menstruação'               => '#f08c8c',
+                    'Ovulação'                  => '#e42615',
+                    'Período fértil'            => '#fc5849',
+                    'Menstruação (projeção)'    => '#f08c8c',
+                    'Ovulação (projeção)'       => '#e42615',
+                    'Período fértil (projeção)' => '#fc5849',
+                    default                     => '#f08c8c',
                 };
+
+                $isProjecao = str_contains($event->title, 'projeção');
 
                 return [
                     'id'              => $event->id,
@@ -28,6 +33,7 @@ class EventController extends Controller
                     'display'         => 'background',
                     'backgroundColor' => $color,
                     'borderColor'     => $color,
+                    'extendedProps'   => ['isProjecao' => $isProjecao],
                 ];
             });
 
@@ -71,15 +77,95 @@ class EventController extends Controller
             'title'   => 'Ovulação'
         ]);
 
-        // Período fértil — pula o dia da ovulação (i === 0)
+        // Período fértil — pula o dia da ovulação
         for ($i = -3; $i <= 3; $i++) {
-            if ($i === 0) continue; // ✅ ovulação tem prioridade
-
+            if ($i === 0) continue;
             Event::create([
                 'user_id' => $userId,
                 'date'    => $ovulacao->copy()->addDays($i)->toDateString(),
                 'title'   => 'Período fértil'
             ]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // Salva projeções futuras no banco
+    // Usa offset em dias a partir da DUM para evitar mutação do Carbon
+    // ─────────────────────────────────────────────────────────
+    public function storeProjecoes(Request $request)
+    {
+        $request->validate([
+            'date'          => 'required|date',
+            'duracao_ciclo' => 'integer|min:21|max:35',
+            'meses'         => 'integer|min:1|max:12',
+        ]);
+
+        $userId       = auth()->id();
+        $duracaoCiclo = (int) $request->input('duracao_ciclo', 28);
+        $meses        = (int) $request->input('meses', 6);
+
+        // Data base fixa — nunca mutada
+        $dum = Carbon::parse($request->date)->startOfDay();
+
+        // Remove projeções antigas para não duplicar
+        Event::where('user_id', $userId)
+            ->where('title', 'like', '%(projeção)%')
+            ->delete();
+
+        // Busca todos os dias que já têm evento real (não projeção)
+        // para evitar sobrescrever com projeção
+        $diasReais = Event::where('user_id', $userId)
+            ->where('title', 'not like', '%(projeção)%')
+            ->pluck('date')
+            ->map(fn($d) => Carbon::parse($d)->toDateString())
+            ->toArray();
+
+        for ($ciclo = 1; $ciclo <= $meses; $ciclo++) {
+            // Offset total em dias para esta iteração
+            $offsetMens = $duracaoCiclo * $ciclo;
+
+            // Próxima menstruação projetada
+            $proxMens = $dum->copy()->addDays($offsetMens);
+
+            // Ovulação = próxima menstruação - 14 dias
+            $ovulacao = $proxMens->copy()->subDays(14);
+
+            // Menstruação projetada — 7 dias
+            for ($d = 0; $d < 7; $d++) {
+                $dia = $proxMens->copy()->addDays($d)->toDateString();
+                if (!in_array($dia, $diasReais)) {
+                    Event::create([
+                        'user_id' => $userId,
+                        'date'    => $dia,
+                        'title'   => 'Menstruação (projeção)',
+                    ]);
+                }
+            }
+
+            // Ovulação projetada
+            $diaOvulacao = $ovulacao->toDateString();
+            if (!in_array($diaOvulacao, $diasReais)) {
+                Event::create([
+                    'user_id' => $userId,
+                    'date'    => $diaOvulacao,
+                    'title'   => 'Ovulação (projeção)',
+                ]);
+            }
+
+            // Período fértil projetado — pula o dia da ovulação
+            for ($j = -3; $j <= 3; $j++) {
+                if ($j === 0) continue;
+                $dia = $ovulacao->copy()->addDays($j)->toDateString();
+                if (!in_array($dia, $diasReais)) {
+                    Event::create([
+                        'user_id' => $userId,
+                        'date'    => $dia,
+                        'title'   => 'Período fértil (projeção)',
+                    ]);
+                }
+            }
         }
 
         return response()->json(['success' => true]);

@@ -28,7 +28,6 @@
             background-color: transparent !important;
             border-color: rgba(255,255,255,0.07) !important;
         }
-
         .fc .fc-col-header-cell-cushion {
             color: rgba(255,255,255,0.45) !important;
             font-size: 10px !important;
@@ -55,6 +54,32 @@
         </div>
 
         <div class="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-4"></div>
+
+        {{-- Dica de uso --}}
+        <div
+            x-data="{ show: true }"
+            x-show="show"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            class="w-full bg-white/10 border border-white/15 rounded-2xl px-4 py-3 mb-3 flex items-start gap-3"
+        >
+            <div class="shrink-0 mt-0.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#E8A8B5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20A10 10 0 0012 2z" />
+                </svg>
+            </div>
+            <div class="flex-1">
+                <p class="text-[11px] text-white/80 leading-relaxed">
+                    Toque no <span class="text-[#E8A8B5] font-medium">dia de início</span> da sua menstruação para registrar o ciclo. O app marcará automaticamente o período fértil e a ovulação.
+                </p>
+            </div>
+            <button x-on:click="show = false" class="shrink-0 text-white/30 hover:text-white/60 transition mt-0.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
 
         {{-- Legenda --}}
         <div class="w-full bg-[#B23A48] rounded-2xl p-4 shadow-xl mb-3">
@@ -115,7 +140,6 @@
     </x-slot>
 
 </x-phone-frame>
-
 
 </body>
 </html>

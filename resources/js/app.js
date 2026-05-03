@@ -11,15 +11,14 @@ Alpine.start();
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    // ✅ CORREÇÃO DEFINITIVA: pega o #calendar que está dentro do container visível
-    // O phone-frame renderiza o slot duas vezes (mobile e desktop), então
-    // precisamos achar o que não está dentro de um sm:hidden
+    // Pega o #calendar dentro do container visível
+    // (o phone-frame renderiza o slot duas vezes: mobile e desktop)
     function getCalendarVisivel() {
         const todos = document.querySelectorAll('#calendar');
         for (const el of todos) {
-            if (el.offsetParent !== null) return el; // offsetParent é null se o elemento estiver oculto
+            if (el.offsetParent !== null) return el;
         }
-        return todos[0]; // fallback
+        return todos[0];
     }
 
     const calendarEl = getCalendarVisivel();
@@ -45,10 +44,11 @@ document.addEventListener('DOMContentLoaded', function() {
             eventDidMount: function(info) {
                 const color = info.event.backgroundColor;
                 const el = info.el;
+                const isProjecao = info.event.extendedProps?.isProjecao;
 
                 el.style.borderRadius = '4px';
                 el.style.border = 'none';
-                el.style.opacity = '1';
+                el.style.opacity = isProjecao ? '0.4' : '1';
 
                 const titleEl = el.querySelector('.fc-event-title');
                 if (titleEl) titleEl.style.display = 'none';
@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         background: ${color};
                         margin: 0 auto 3px;
                         box-shadow: 0 0 6px ${color};
+                        opacity: ${isProjecao ? '0.4' : '1'};
                     `;
                     dayEl.querySelector('.fc-daygrid-day-frame').appendChild(dot);
                 }
@@ -89,50 +90,51 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             },
 
-            dateClick: function(info) {
-                var dataSelecionada = info.dateStr;
+            // ✅ async/await para garantir ordem correta das chamadas
+            dateClick: async function(info) {
+                const dataSelecionada = info.dateStr;
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
-                fetch('/events', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({ date: dataSelecionada })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        var inicio = new Date(dataSelecionada);
+                // Animação de feedback imediata
+                const dayEl = info.dayEl;
+                dayEl.style.transform = 'scale(0.92)';
+                dayEl.style.transition = 'transform 0.15s ease';
+                setTimeout(() => { dayEl.style.transform = 'scale(1)'; }, 150);
 
-                        // Menstruação — 7 dias em vermelho
-                        for (let i = 0; i < 7; i++) {
-                            let d = new Date(inicio);
-                            d.setDate(d.getDate() + i);
-                            adicionarDot(calendar, d.toISOString().split('T')[0], '#f08c8c');
-                        }
+                try {
+                    // 1. Salva o ciclo atual no banco
+                    const resCiclo = await fetch('/events', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: JSON.stringify({ date: dataSelecionada })
+                    });
+                    const dataCiclo = await resCiclo.json();
 
-                        // Ovulação — dia 14 em roxo (prioridade)
-                        let ovulacao = new Date(inicio);
-                        ovulacao.setDate(ovulacao.getDate() + 14);
-                        adicionarDot(calendar, ovulacao.toISOString().split('T')[0], '#e42615');
+                    if (!dataCiclo.success) return;
 
-                        // Período fértil — pula o dia da ovulação (i === 0)
-                        for (let i = -3; i <= 3; i++) {
-                            if (i === 0) continue;
-                            let d = new Date(ovulacao);
-                            d.setDate(d.getDate() + i);
-                            adicionarDot(calendar, d.toISOString().split('T')[0], '#fc5849');
-                        }
+                    // 2. Salva as projeções futuras no banco
+                    await fetch('/events/projecoes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: JSON.stringify({
+                            date: dataSelecionada,
+                            duracao_ciclo: 28,
+                            meses: 6
+                        })
+                    });
 
-                        // Animação de feedback
-                        const dayEl = info.dayEl;
-                        dayEl.style.transform = 'scale(0.92)';
-                        dayEl.style.transition = 'transform 0.15s ease';
-                        setTimeout(() => { dayEl.style.transform = 'scale(1)'; }, 150);
-                    }
-                })
-                .catch(error => console.error('Erro:', error));
+                    // 3. Só recarrega após AMBAS as chamadas terminarem
+                    calendar.refetchEvents();
+
+                } catch (error) {
+                    console.error('Erro ao salvar eventos:', error);
+                }
             }
         });
 
@@ -163,31 +165,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 50);
     }
 });
-
-function adicionarDot(calendar, dateStr, color) {
-    calendar.addEvent({
-        start: dateStr,
-        display: 'background',
-        backgroundColor: color,
-        borderColor: color,
-    });
-
-    setTimeout(() => {
-        const dayEls = document.querySelectorAll('.fc-daygrid-day');
-        dayEls.forEach(dayEl => {
-            if (dayEl.getAttribute('data-date') === dateStr && !dayEl.querySelector('.ciclo-dot')) {
-                const dot = document.createElement('div');
-                dot.className = 'ciclo-dot';
-                dot.style.cssText = `
-                    width: 6px;
-                    height: 6px;
-                    border-radius: 50%;
-                    background: ${color};
-                    margin: 0 auto 3px;
-                    box-shadow: 0 0 6px ${color};
-                `;
-                dayEl.querySelector('.fc-daygrid-day-frame').appendChild(dot);
-            }
-        });
-    }, 30);
-}
