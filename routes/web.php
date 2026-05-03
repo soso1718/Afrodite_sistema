@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
     Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
     Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+    Route::post('/events/projecoes', [EventController::class, 'storeProjecoes'])->name('events.projecoes');
 
     // Registros (lista)
     // Registros (lista)
