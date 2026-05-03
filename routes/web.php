@@ -9,10 +9,13 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\RegistroController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Resposta;
+use App\Http\Controllers\OnboardingController;
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return redirect()->route('onboarding');
 });
+
+Route::get('/welcome', [OnboardingController::class, 'index'])->name('onboarding');
 
 Route::get('/dashboard', function () {
     $user = Auth::user();
@@ -34,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 
     Route::get('/events', [EventController::class, 'index'])->name('events.index');
     Route::post('/events', [EventController::class, 'store'])->name('events.store');
