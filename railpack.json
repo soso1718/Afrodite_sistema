@@ -17,5 +17,25 @@
     "libonig-dev",
     "libzip-dev",
     "libpq-dev"
+    "libssl-dev",
+    "libxml2-dev",
+    "libsqlite3-dev",
+    "libonig-dev",
+    "libzip-dev",
+    "libpng-dev",
+    "libjpeg-dev",
+    "libfreetype6-dev",
+    "libwebp-dev",
+    "libgd-dev",
+    "libicu-dev",
+    "libxslt1-dev",
+    "libreadline-dev",
+    "libbz2-dev",
+    "libgmp-dev",
+    "libsodium-dev",
+    "libtidy-dev",
+    "libargon2-dev",
+    "pkg-config",
+    "autoconf"
   ]
 }

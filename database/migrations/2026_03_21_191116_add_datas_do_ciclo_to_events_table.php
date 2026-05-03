@@ -12,8 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('events', function (Blueprint $table) {
+<<<<<<< Updated upstream
             $table->date('menstruacao_fim')->nullable();
             $table->date('periodo_fertil_inicio')->nullable();
+=======
+            $table->date('periodo_fertil_inicio')->nullable();
+            $table->date('menstruacao_fim')->nullable();
+>>>>>>> Stashed changes
             $table->date('periodo_fertil_fim')->nullable();
             $table->date('ovulacao')->nullable();
         });
