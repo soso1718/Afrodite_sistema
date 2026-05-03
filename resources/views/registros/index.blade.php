@@ -16,7 +16,75 @@
 
 <body class="flex justify-center bg-[#1a0009] min-h-screen">
 
-{{-- Modal de edição --}}
+{{-- ───── MODAL DE EXCLUSÃO ───── --}}
+<div
+    x-data="{
+        show: false,
+        formAction: '',
+        open(action) {
+            this.formAction = action;
+            this.show = true;
+        }
+    }"
+    x-on:open-delete-modal.window="open($event.detail.action)"
+    x-show="show"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    class="fixed inset-0 z-50 flex items-center justify-center px-6"
+    style="display: none;"
+>
+    {{-- Backdrop --}}
+    <div class="absolute inset-0 bg-black/60" x-on:click="show = false"></div>
+
+    {{-- Card --}}
+    <div
+        x-show="show"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+        x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+        class="relative w-4/5 max-w-xs bg-[#B23A48] rounded-2xl p-5 shadow-2xl"
+    >
+        <h2 class="font-display text-white text-lg mb-2">Tem certeza que quer deletar este registro?</h2>
+
+        <p class="text-sm text-white/60 mb-5">
+            Todos os dados serão permanentemente removidos.
+        </p>
+
+        <div class="flex gap-3">
+            <button
+                type="button"
+                x-on:click="show = false"
+                class="font-display flex-1 bg-white/10 border border-white/20
+                       text-white text-sm py-3 rounded-xl
+                       active:scale-95 transition-transform"
+            >
+                Cancelar
+            </button>
+
+            <form x-bind:action="formAction" method="POST" class="flex-1">
+                @csrf
+                @method('DELETE')
+                <button
+                    type="submit"
+                    class="font-display w-full bg-[#720026] border border-[#E8A8B5]/30
+                           text-[#E8A8B5] text-sm py-3 rounded-xl
+                           active:scale-95 transition-transform"
+                >
+                    Confirmar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- ───── MODAL DE EDIÇÃO ───── --}}
 <div
     x-data="{
         show: false,
@@ -41,10 +109,8 @@
     class="fixed inset-0 z-50 flex items-center justify-center px-6"
     style="display: none;"
 >
-    {{-- Backdrop --}}
     <div class="absolute inset-0 bg-black/60" x-on:click="show = false"></div>
 
-    {{-- Modal --}}
     <div
         x-show="show"
         x-transition:enter="transition ease-out duration-200"
@@ -57,11 +123,7 @@
     >
         <h2 class="font-display text-white text-lg mb-4">Editar Registro</h2>
 
-        <form
-            x-bind:action="'/registros/' + eventId"
-            method="POST"
-            class="space-y-4"
-        >
+        <form x-bind:action="'/registros/' + eventId" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
 
@@ -79,7 +141,7 @@
             </div>
 
             <div>
-                <label class="block text-[10px] tracking-widest uppercase text-white/40 mb-1">Tipo</label>
+                <label class="block text-[10px] tracking-widests uppercase text-white/40 mb-1">Tipo</label>
                 <input
                     type="text"
                     name="title"
@@ -141,13 +203,11 @@
     <div class="w-full bg-[#B23A48] rounded-2xl p-4 shadow-xl">
         <h2 class="text-[10px] tracking-[0.12em] uppercase text-white/50 mb-3">Registros do mês</h2>
 
-        {{-- Cabeçalho --}}
         <div class="flex items-center mb-2 px-3 gap-2">
             <span class="text-[10px] tracking-[0.12em] uppercase text-white/40 font-medium w-24 shrink-0">Data</span>
             <span class="text-[10px] tracking-[0.12em] uppercase text-white/40 font-medium flex-1">Tipo</span>
         </div>
 
-        {{-- Linhas --}}
         <div class="flex flex-col gap-2">
             @forelse ($events as $event)
                 <div class="flex items-center gap-2
@@ -155,12 +215,10 @@
                         rounded-xl px-3 py-2.5
                         transition-colors duration-150">
 
-                    {{-- Data --}}
                     <span class="text-sm text-white/80 font-light w-24 shrink-0">
                         {{ \Carbon\Carbon::parse($event->date)->format('d/m/Y') }}
                     </span>
 
-                    {{-- Tipo --}}
                     <span class="flex items-center gap-1.5 flex-1 min-w-0">
                         @php
                             $tipo = $event->title;
@@ -175,18 +233,23 @@
                         <span class="text-sm text-white/80 font-light truncate">{{ $tipo }}</span>
                     </span>
 
-                    {{-- Botões --}}
                     <div class="flex gap-3 shrink-0 items-center">
-                        <form action="{{ route('registros.destroy', $event->id) }}" method="POST" class="inline delete-form flex items-center">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-300 hover:text-red-500 transition flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-                        </form>
 
+                        {{-- ✅ Botão deletar abre o modal --}}
+                        <button
+                            type="button"
+                            x-data
+                            x-on:click="$dispatch('open-delete-modal', {
+                                action: '{{ route('registros.destroy', $event->id) }}'
+                            })"
+                            class="text-red-300 hover:text-red-500 transition flex items-center"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+
+                        {{-- Botão editar --}}
                         <button
                             type="button"
                             x-data
@@ -245,31 +308,6 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </x-phone-frame>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const forms = document.querySelectorAll('.delete-form');
-    forms.forEach(form => {
-        form.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            if (!confirm('Deseja realmente excluir este registro?')) return;
-
-            const response = await fetch(this.action, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams(new FormData(this))
-            });
-
-            if (response.ok) {
-                window.location.reload();
-            }
-        });
-    });
-});
-</script>
 
 </body>
 </html>

@@ -9,10 +9,56 @@ import interactionPlugin from '@fullcalendar/interaction';
 window.Alpine = Alpine;
 Alpine.start();
 
+// ─── Loader do calendário ───
+function mostrarLoaderCalendario(calendarEl, texto = 'Salvando...') {
+    if (calendarEl.querySelector('.cal-loader')) return;
+
+    const loader = document.createElement('div');
+    loader.className = 'cal-loader';
+    loader.style.cssText = `
+        position: absolute;
+        inset: 0;
+        z-index: 100;
+        background: rgba(114, 0, 38, 0.75);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        backdrop-filter: blur(2px);
+    `;
+    loader.innerHTML = `
+        <style>
+            @keyframes girar-cal {
+                from { transform: rotate(0deg); }
+                to   { transform: rotate(360deg); }
+            }
+        </style>
+        <svg style="width:28px; height:28px; animation: girar-cal 0.8s linear infinite;"
+             viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10"
+                    stroke="#E8A8B5"
+                    stroke-width="3"
+                    stroke-dasharray="40"
+                    stroke-dashoffset="10"/>
+        </svg>
+        <p style="font-family:'Sansita One',cursive; color:#E8A8B5; font-size:12px; letter-spacing:1px; margin:0;">
+            ${texto}
+        </p>
+    `;
+
+    calendarEl.style.position = 'relative';
+    calendarEl.appendChild(loader);
+}
+
+function esconderLoaderCalendario(calendarEl) {
+    const loader = calendarEl.querySelector('.cal-loader');
+    if (loader) loader.remove();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 
-    // Pega o #calendar dentro do container visível
-    // (o phone-frame renderiza o slot duas vezes: mobile e desktop)
     function getCalendarVisivel() {
         const todos = document.querySelectorAll('#calendar');
         for (const el of todos) {
@@ -40,6 +86,15 @@ document.addEventListener('DOMContentLoaded', function() {
             weekends: true,
             height: 'auto',
             fixedWeekCount: false,
+
+            // ✅ Loader de carregamento inicial
+            loading: function(isLoading) {
+                if (isLoading) {
+                    mostrarLoaderCalendario(calendarEl, 'Carregando...');
+                } else {
+                    esconderLoaderCalendario(calendarEl);
+                }
+            },
 
             eventDidMount: function(info) {
                 const color = info.event.backgroundColor;
@@ -90,12 +145,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             },
 
-            // ✅ async/await para garantir ordem correta das chamadas
+            // ✅ async/await do colega + loader + dots da sua versão
             dateClick: async function(info) {
                 const dataSelecionada = info.dateStr;
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
-                // Animação de feedback imediata
+                // Loader aparece imediatamente
+                mostrarLoaderCalendario(calendarEl, 'Salvando...');
+
+                // Animação de feedback no dia clicado
                 const dayEl = info.dayEl;
                 dayEl.style.transform = 'scale(0.92)';
                 dayEl.style.transition = 'transform 0.15s ease';
@@ -113,7 +171,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                     const dataCiclo = await resCiclo.json();
 
-                    if (!dataCiclo.success) return;
+                    if (!dataCiclo.success) {
+                        esconderLoaderCalendario(calendarEl);
+                        return;
+                    }
 
                     // 2. Salva as projeções futuras no banco
                     await fetch('/events/projecoes', {
@@ -129,16 +190,42 @@ document.addEventListener('DOMContentLoaded', function() {
                         })
                     });
 
-                    // 3. Só recarrega após AMBAS as chamadas terminarem
+                    // 3. Adiciona dots visualmente
+                    const inicio = new Date(dataSelecionada);
+
+                    for (let i = 0; i < 7; i++) {
+                        let d = new Date(inicio);
+                        d.setDate(d.getDate() + i);
+                        adicionarDot(calendar, d.toISOString().split('T')[0], '#f08c8c');
+                    }
+
+                    let ovulacao = new Date(inicio);
+                    ovulacao.setDate(ovulacao.getDate() + 14);
+                    adicionarDot(calendar, ovulacao.toISOString().split('T')[0], '#e42615');
+
+                    for (let i = -3; i <= 3; i++) {
+                        if (i === 0) continue;
+                        let d = new Date(ovulacao);
+                        d.setDate(d.getDate() + i);
+                        adicionarDot(calendar, d.toISOString().split('T')[0], '#fc5849');
+                    }
+
+                    // 4. Recarrega os eventos do banco para garantir sincronização
                     calendar.refetchEvents();
 
                 } catch (error) {
                     console.error('Erro ao salvar eventos:', error);
+                } finally {
+                    // ✅ Esconde o loader sempre, mesmo se der erro
+                    esconderLoaderCalendario(calendarEl);
                 }
             }
         });
 
         calendar.render();
+
+        // ✅ Loader imediato ao entrar na tela
+        mostrarLoaderCalendario(calendarEl, 'Carregando...');
 
         setTimeout(() => {
             calendarEl.querySelectorAll('.fc-button').forEach(btn => {
@@ -165,3 +252,31 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 50);
     }
 });
+
+function adicionarDot(calendar, dateStr, color) {
+    calendar.addEvent({
+        start: dateStr,
+        display: 'background',
+        backgroundColor: color,
+        borderColor: color,
+    });
+
+    setTimeout(() => {
+        const dayEls = document.querySelectorAll('.fc-daygrid-day');
+        dayEls.forEach(dayEl => {
+            if (dayEl.getAttribute('data-date') === dateStr && !dayEl.querySelector('.ciclo-dot')) {
+                const dot = document.createElement('div');
+                dot.className = 'ciclo-dot';
+                dot.style.cssText = `
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: ${color};
+                    margin: 0 auto 3px;
+                    box-shadow: 0 0 6px ${color};
+                `;
+                dayEl.querySelector('.fc-daygrid-day-frame').appendChild(dot);
+            }
+        });
+    }, 30);
+}
