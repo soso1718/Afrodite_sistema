@@ -93,5 +93,5 @@ public function destroy(string $id)
     return redirect()->route('registros.index')
                      ->with('toast', 'Registro excluído com sucesso!');
 }
-
+//teste no git 
 }
