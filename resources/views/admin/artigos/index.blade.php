@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sansita+One&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'DM Sans', sans-serif; }
@@ -13,6 +14,65 @@
 </head>
 
 <body class="flex justify-center bg-[#1a0009] min-h-screen">
+
+{{-- ───── MODAL DE EXCLUSÃO ───── --}}
+<div
+    x-data="{
+        show: false,
+        formAction: '',
+        open(action) {
+            this.formAction = action;
+            this.show = true;
+        }
+    }"
+    x-on:open-delete-modal.window="open($event.detail.action)"
+    x-show="show"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    class="fixed inset-0 z-50 flex items-center justify-center px-6"
+    style="display: none;"
+>
+    <div class="absolute inset-0 bg-black/60" x-on:click="show = false"></div>
+
+    <div
+        x-show="show"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+        x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+        class="relative w-4/5 max-w-xs bg-[#B23A48] rounded-2xl p-5 shadow-2xl"
+    >
+        <h2 class="font-display text-white text-lg mb-2">Tem certeza que quer deletar este artigo?</h2>
+        <p class="text-sm text-white/60 mb-5">Todos os dados serão permanentemente removidos.</p>
+
+        <div class="flex gap-3">
+            <button
+                type="button"
+                x-on:click="show = false"
+                class="font-display flex-1 bg-white/10 border border-white/20
+                       text-white text-sm py-3 rounded-xl
+                       active:scale-95 transition-transform"
+            >Cancelar</button>
+
+            <form x-bind:action="formAction" method="POST" class="flex-1">
+                @csrf
+                @method('DELETE')
+                <button
+                    type="submit"
+                    class="font-display w-full bg-[#E8A8B5] text-[#5a0018]
+                           text-sm py-3 rounded-xl
+                           active:scale-95 transition-transform"
+                >Confirmar</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 <x-phone-frame>
 
@@ -109,25 +169,20 @@
                             Editar
                         </a>
 
-                        <form
-                            action="{{ route('admin.artigos.destroy', $artigo->id) }}"
-                            method="POST"
-                            onsubmit="abrirModal(this); return false;"
-                            class="flex-1"
+                        <button
+                            type="button"
+                            x-data
+                            x-on:click="$dispatch('open-delete-modal', {
+                                action: '{{ route('admin.artigos.destroy', $artigo->id) }}'
+                            })"
+                            class="flex-1 bg-[#720026]/60 border border-[#E8A8B5]/30
+                                   text-[#E8A8B5] text-xs tracking-wide
+                                   py-2.5 rounded-lg
+                                   active:scale-95 transition-transform"
+                            style="font-family:'Sansita One',cursive;"
                         >
-                            @csrf
-                            @method('DELETE')
-                            <button
-                                type="submit"
-                                class="w-full bg-[#720026]/60 border border-[#E8A8B5]/30
-                                       text-[#E8A8B5] text-xs tracking-wide
-                                       py-2.5 rounded-lg
-                                       active:scale-95 transition-transform"
-                                style="font-family:'Sansita One',cursive;"
-                            >
-                                Excluir
-                            </button>
-                        </form>
+                            Excluir
+                        </button>
 
                     </div>
 
@@ -146,71 +201,6 @@
     </div>
 
 </x-phone-frame>
-{{-- ───── MODAL DE CONFIRMAÇÃO ───── --}}
-    <div id="modal-excluir"
-        class="fixed inset-0 z-50 flex items-center justify-center px-8 mx-4"
-        style="display: none !important; background: rgba(0,0,0,0.6);">
 
-        <div style="width: calc(320px - 12px);" class="bg-[#B23A48] rounded-2xl p-6 shadow-2xl text-white">
-
-            <h2 class="font-display text-xl mb-2">Tem certeza que quer deletar este artigo?</h2>
-
-            <p class="text-sm text-white/60 mb-6">
-                Todos os dados serão permanentemente removidos.
-            </p>
-
-            <div class="flex gap-3">
-
-                <button
-                    onclick="fecharModal()"
-                    class="flex-1 font-display text-sm tracking-wide
-                        bg-white/10 border border-white/20
-                        text-white py-3 rounded-xl
-                        active:scale-95 transition-transform"
-                >
-                    Cancelar
-                </button>
-
-                <button
-                    id="btn-confirmar"
-                    onclick="confirmarExclusao()"
-                    class="flex-1 font-display text-sm tracking-wide
-                        bg-[#720026] border border-[#E8A8B5]/30
-                        text-[#E8A8B5] py-3 rounded-xl
-                        active:scale-95 transition-transform"
-                >
-                    Confirmar
-                </button>
-
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let formParaEnviar = null;
-
-        function abrirModal(form) {
-            formParaEnviar = form;
-            const modal = document.getElementById('modal-excluir');
-            modal.style.display = 'flex';
-        }
-
-        function fecharModal() {
-            const modal = document.getElementById('modal-excluir');
-            modal.style.display = 'none';
-            formParaEnviar = null;
-        }
-
-        function confirmarExclusao() {
-            if (formParaEnviar) {
-                formParaEnviar.submit();
-            }
-        }
-
-        // Fecha ao clicar fora do card
-        document.getElementById('modal-excluir').addEventListener('click', function(e) {
-            if (e.target === this) fecharModal();
-        });
-    </script>
 </body>
 </html>
