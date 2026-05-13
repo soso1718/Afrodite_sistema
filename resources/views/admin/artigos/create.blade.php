@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sansita+One&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <style>
         body { font-family: 'DM Sans', sans-serif; }
         .font-display { font-family: 'Sansita One', cursive; }
@@ -91,20 +93,21 @@
                     >
                 </div>
 
-                {{-- Conteúdo --}}
+               {{-- Conteúdo --}}
                 <div class="flex flex-col gap-1.5">
                     <label class="text-[10px] tracking-widest uppercase text-white/40">Conteúdo</label>
                     <textarea
                         name="conteudo"
                         rows="8"
                         placeholder="Escreva o conteúdo do artigo..."
-                        class="w-full rounded-xl px-4 py-3
-                               bg-white/10 border border-white/20
-                               text-white text-sm placeholder-white/30
-                               focus:outline-none focus:ring-2 focus:ring-[#E8A8B5]
-                               resize-none leading-relaxed"
+                        class="ckeditor w-full rounded-xl px-4 py-3
+                            bg-white/10 border border-white/20
+                            text-white text-sm placeholder-white/30
+                            focus:outline-none focus:ring-2 focus:ring-[#E8A8B5]
+                            resize-none leading-relaxed"
                     >{{ old('conteudo') }}</textarea>
                 </div>
+
 
                 {{-- Botões --}}
                 <div class="flex gap-3 pt-1">

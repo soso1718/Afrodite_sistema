@@ -39,7 +39,6 @@
 {{-- DESKTOP: moldura de celular --}}
 <div class="hidden sm:flex min-h-screen w-full items-center justify-center bg-[#1a0009]">
 
-    {{-- ✅ moldura com position:relative para o loader ficar dentro --}}
     <div class="relative flex flex-col w-[390px] h-[844px] rounded-[50px] border-[8px] border-[#2a2a2a] shadow-2xl overflow-hidden bg-[#1a0009]">
 
         {{-- Notch --}}
@@ -62,7 +61,7 @@
             <div class="shrink-0 z-40">{{ $navbar }}</div>
         @endif
 
-        {{-- ✅ Loader desktop — absolute fica dentro da moldura --}}
+        {{-- Loader desktop --}}
         <div id="loader-desktop"
              style="display:none; position:absolute; inset:0; z-index:9999;
                     background: linear-gradient(to bottom, #720026, #900131 50%, #D80048);

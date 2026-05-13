@@ -5,6 +5,10 @@ import Alpine from 'alpinejs';
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+console.log('Inicializando CKEditor...');
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import '@ckeditor/ckeditor5-build-classic/build/translations/pt-br';
+
 
 window.Alpine = Alpine;
 Alpine.start();
@@ -251,6 +255,24 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }, 50);
     }
+
+   document.querySelectorAll('.ckeditor').forEach((element) => {
+        ClassicEditor.create(element, {
+            language: 'pt-br',
+        }).then(editor => {
+            const scrollContainer = document.querySelector('.overflow-y-auto');
+            if (scrollContainer) {
+                editor.ui.viewportOffset = { top: 60 };
+                editor.editing.view.document.on('layoutChanged', () => {
+                    editor.ui.update();
+                });
+                scrollContainer.addEventListener('scroll', () => {
+                    editor.ui.update();
+                });
+            }
+        }).catch(error => console.error(error));
+    });
+
 });
 
 function adicionarDot(calendar, dateStr, color) {

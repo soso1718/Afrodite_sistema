@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sansita+One&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <style>
         body { font-family: 'DM Sans', sans-serif; }
         .font-display { font-family: 'Sansita One', cursive; }
@@ -62,9 +64,10 @@
         {{-- Conteúdo --}}
         <div class="w-full bg-[#B23A48] rounded-2xl p-5 shadow-xl text-white flex flex-col gap-5">
 
-            <p class="text-sm text-white/80 leading-relaxed">
-                {{ $artigo->conteudo }}
-            </p>
+           <div class="ck-content">
+                {!! $artigo->conteudo !!}
+            </div>
+
 
             <a
                 href="{{ route('artigos.index') }}"

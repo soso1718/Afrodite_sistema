@@ -5,24 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sansita+One&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body { font-family: 'DM Sans', sans-serif; }
         .font-display { font-family: 'Sansita One', cursive; }
 
-        textarea::-webkit-scrollbar {
-            width: 4px;
-        }
-        textarea::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-        }
-        textarea::-webkit-scrollbar-thumb {
-            background: rgba(232,168,181,0.4);
-            border-radius: 10px;
-        }
-        textarea::-webkit-scrollbar-thumb:hover {
-            background: rgba(232,168,181,0.7);
-        }
+        textarea::-webkit-scrollbar { width: 4px; }
+        textarea::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+        textarea::-webkit-scrollbar-thumb { background: rgba(232,168,181,0.4); border-radius: 10px; }
+        textarea::-webkit-scrollbar-thumb:hover { background: rgba(232,168,181,0.7); }
     </style>
     <title>Afrodite — Editar Artigo</title>
 </head>
@@ -31,7 +22,6 @@
 
 <x-phone-frame :toast="session('toast')">
 
-    {{-- ───── NAVBAR ───── --}}
     <x-slot name="navbar">
         <nav class="w-full bg-[#720026] flex justify-around items-center py-3">
 
@@ -66,7 +56,6 @@
                 bg-gradient-to-b from-[#720026] via-[#900131] to-[#D80048]
                 flex flex-col px-4 pt-6 pb-28">
 
-        {{-- Header --}}
         <div class="mb-5">
             <p class="text-[#E8A8B5] text-xs tracking-[0.2em] uppercase font-medium mb-1">Administração</p>
             <h1 class="font-display text-white text-2xl leading-tight">Editar artigo</h1>
@@ -74,10 +63,8 @@
 
         <div class="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-5"></div>
 
-        {{-- Card --}}
         <div class="w-full bg-[#B23A48] rounded-2xl p-4 shadow-xl text-white">
 
-            {{-- Erros --}}
             @if ($errors->any())
                 <div class="bg-red-900/50 border border-red-400/30 text-red-200 p-3 rounded-xl mb-4 text-xs">
                     <ul class="list-disc list-inside space-y-1">
@@ -92,7 +79,6 @@
                 @csrf
                 @method('PUT')
 
-                {{-- Título --}}
                 <div class="flex flex-col gap-1.5">
                     <label class="text-[10px] tracking-widest uppercase text-white/40">Título</label>
                     <input
@@ -107,22 +93,20 @@
                     >
                 </div>
 
-                {{-- Conteúdo --}}
                 <div class="flex flex-col gap-1.5">
                     <label class="text-[10px] tracking-widest uppercase text-white/40">Conteúdo</label>
                     <textarea
                         name="conteudo"
                         rows="8"
                         placeholder="Escreva o conteúdo do artigo..."
-                        class="w-full rounded-xl px-4 py-3
-                               bg-white/10 border border-white/20
-                               text-white text-sm placeholder-white/30
-                               focus:outline-none focus:ring-2 focus:ring-[#E8A8B5]
-                               resize-none leading-relaxed"
+                        class="ckeditor w-full rounded-xl px-4 py-3
+                            bg-white/10 border border-white/20
+                            text-white text-sm placeholder-white/30
+                            focus:outline-none focus:ring-2 focus:ring-[#E8A8B5]
+                            resize-none leading-relaxed"
                     >{{ old('conteudo', $artigo->conteudo) }}</textarea>
                 </div>
 
-                {{-- Botões --}}
                 <div class="flex gap-3 pt-1">
                     <a
                         href="{{ route('artigos.index') }}"

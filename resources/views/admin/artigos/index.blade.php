@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Sansita+One&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'DM Sans', sans-serif; }
@@ -141,8 +142,9 @@
                     <h2 class="font-display text-base leading-snug">{{ $artigo->titulo }}</h2>
 
                     <p class="text-sm text-white/70 leading-relaxed">
-                        {{ \Illuminate\Support\Str::limit($artigo->conteudo, 200) }}
+                        {{ \Illuminate\Support\Str::limit(strip_tags($artigo->conteudo), 200) }}
                     </p>
+
 
                     {{-- Ações --}}
                     <div class="flex gap-2 pt-1">
