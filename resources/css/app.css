@@ -1,6 +1,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
 /* =============================================
    Base — Afrodite
    ============================================= */
@@ -8,12 +9,11 @@
 body {
     font-family: 'DM Sans', sans-serif;
     background-color: #1a0009;
-    color: #fff;
+    color: #fdbcbc;
 }
 
 .font-display {
-    font-family: 'Sansita One', cursive;
-}
+  font-family: 'Sansita One', cursive;}
 
 /* Links e botões */
 a, button {
@@ -104,7 +104,7 @@ input:focus, textarea:focus {
 }
 .ck.ck-list__item .ck-button:hover,
 .ck.ck-list__item .ck-button.ck-on {
-    background-color: rgba(255, 255, 255, 0.08) !important;
+    background-color: rgba(255, 255, 255, 0.162) !important;
     color: rgba(246, 143, 143, 0.9) !important;
 }
 
@@ -129,7 +129,7 @@ input:focus, textarea:focus {
     color: rgba(255, 255, 255, 0.35) !important;
 }
 
-/* Tooltip */
+
 .ck.ck-tooltip .ck-tooltip__text {
     background-color: #720026 !important;
     color: rgba(255, 255, 255, 0.7) !important;
