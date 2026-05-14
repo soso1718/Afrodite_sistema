@@ -109,6 +109,14 @@ input:focus, textarea:focus {
     fill: rgba(255, 255, 255, 0.7) !important;
 }
 
+.toolbar-container {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.toolbar-container .toolbar-item {
+  display: inline-block;
+}
+
 /* Área editável */
 .ck.ck-editor__main .ck-editor__editable,
 .ck.ck-editor__main .ck-editor__editable.ck-editor__editable_inline {
