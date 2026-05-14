@@ -1,7 +1,6 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-
 /* =============================================
    Base — Afrodite
    ============================================= */
@@ -64,7 +63,7 @@ input:focus, textarea:focus {
     z-index: 999 !important;
 }
 
-/* Toolbar com scroll lateral invisível */
+/* Toolbar principal com scroll horizontal */
 .ck.ck-toolbar {
     display: flex !important;
     flex-wrap: nowrap !important;
@@ -81,20 +80,32 @@ input:focus, textarea:focus {
 .ck.ck-toolbar::-webkit-scrollbar { display: none !important; }
 .ck.ck-toolbar .ck-toolbar__items { flex-wrap: nowrap !important; }
 
-.ck.ck-toolbar__separator { background-color: rgba(255, 255, 255, 0.15) !important; }
-.ck.ck-toolbar .ck-button,
-.ck.ck-toolbar .ck-button__label { color: rgba(255, 255, 255, 0.7) !important; }
-.ck.ck-toolbar .ck-button:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 0.9) !important;
+/* Dropdown dos três pontinhos com scroll lateral */
+.ck.ck-dropdown__panel {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    background-color: #900131 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    padding: 4px !important;
 }
-.ck.ck-toolbar .ck-button.ck-on {
-    background-color: rgba(255, 255, 255, 0.12) !important;
-    color: rgba(255, 255, 255, 0.9) !important;
+.ck.ck-dropdown__panel::-webkit-scrollbar { display: none !important; }
+.ck.ck-dropdown__panel .ck-list__item {
+    display: inline-block !important;
+    white-space: nowrap !important;
 }
-.ck.ck-toolbar .ck-icon {
+
+/* Botões dentro do dropdown */
+.ck.ck-list__item .ck-button {
     color: rgba(255, 255, 255, 0.7) !important;
-    fill: rgba(255, 255, 255, 0.7) !important;
+}
+.ck.ck-list__item .ck-button:hover,
+.ck.ck-list__item .ck-button.ck-on {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    color: rgba(246, 143, 143, 0.9) !important;
 }
 
 /* Área editável */
@@ -116,20 +127,6 @@ input:focus, textarea:focus {
 /* Placeholder */
 .ck.ck-editor__editable .ck-placeholder::before {
     color: rgba(255, 255, 255, 0.35) !important;
-}
-
-/* Dropdowns */
-.ck.ck-dropdown__panel,
-.ck.ck-list {
-    background-color: #900131 !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 8px !important;
-}
-.ck.ck-list__item .ck-button { color: rgba(255, 255, 255, 0.7) !important; }
-.ck.ck-list__item .ck-button:hover,
-.ck.ck-list__item .ck-button.ck-on {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(246, 143, 143, 0.9) !important;
 }
 
 /* Tooltip */
