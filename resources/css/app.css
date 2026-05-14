@@ -9,11 +9,12 @@
 body {
     font-family: 'DM Sans', sans-serif;
     background-color: #1a0009;
-    color: #fdbcbc;
+    color: #fff;
 }
 
 .font-display {
-  font-family: 'Sansita One', cursive;}
+    font-family: 'Sansita One', cursive;
+}
 
 /* Links e botões */
 a, button {
@@ -129,7 +130,7 @@ input:focus, textarea:focus {
     color: rgba(255, 255, 255, 0.35) !important;
 }
 
-
+/* Tooltip */
 .ck.ck-tooltip .ck-tooltip__text {
     background-color: #720026 !important;
     color: rgba(255, 255, 255, 0.7) !important;
