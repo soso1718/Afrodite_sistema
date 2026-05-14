@@ -11,25 +11,29 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $userId = auth()->id();
-        $firstDay = Event::where('user_id', $userId)
+        $diasReais = Event::where('user_id', $userId)
             ->where('title', 'Menstruação')
             ->orderBy('date', 'asc')
-            ->first();
+            ->get();
 
         $events = collect();
 
-        if ($firstDay) {
-            $inicio = Carbon::parse($firstDay->date)->startOfDay();
+        if ($diasReais->isNotEmpty()) {
+            $inicio = Carbon::parse($diasReais->first()->date)->startOfDay();
             $events = $this->gerarProjecoes($inicio, $userId);
-            $events->prepend([
-                'id'              => $firstDay->id,
-                'title'           => '',
-                'start'           => $firstDay->date,
-                'display'         => 'background',
-                'backgroundColor' => '#f08c8c',
-                'borderColor'     => '#f08c8c',
-                'extendedProps'   => ['isProjecao' => false],
-            ]);
+
+            // adiciona todos os dias reais
+            foreach ($diasReais as $dia) {
+                $events->prepend([
+                    'id'              => $dia->id,
+                    'title'           => 'Menstruação',
+                    'start'           => $dia->date,
+                    'display'         => 'background',
+                    'backgroundColor' => '#f08c8c',
+                    'borderColor'     => '#f08c8c',
+                    'extendedProps'   => ['isProjecao' => false],
+                ]);
+            }
         }
 
         return response()->json($events);
@@ -39,24 +43,24 @@ class EventController extends Controller
     {
         $request->validate(['date' => 'required|date']);
 
-    $userId = auth()->id();
-    $data = Carbon::parse($request->date)->toDateString();
+        $userId = auth()->id();
+        $data = Carbon::parse($request->date)->toDateString();
 
-    // Verifica se já existe esse dia como real
-    $exists = Event::where('user_id', $userId)
-        ->where('date', $data)
-        ->where('title', 'Menstruação')
-        ->exists();
+        // Verifica se já existe esse dia como real
+        $exists = Event::where('user_id', $userId)
+            ->where('date', $data)
+            ->where('title', 'Menstruação')
+            ->exists();
 
-    if (!$exists) {
-        Event::create([
-            'user_id' => $userId,
-            'date'    => $data,
-            'title'   => 'Menstruação'
-        ]);
-    }
+        if (!$exists) {
+            Event::create([
+                'user_id' => $userId,
+                'date'    => $data,
+                'title'   => 'Menstruação'
+            ]);
+        }
 
-    return response()->json(['success' => true]);
+        return response()->json(['success' => true]);
     }
 
     public function update(Request $request, string $id)
@@ -87,7 +91,7 @@ class EventController extends Controller
         for ($i = 1; $i < 7; $i++) {
             $eventos->push([
                 'id'              => uniqid(),
-                'title'           => '',
+                'title'           => 'Menstruação',
                 'start'           => $dum->copy()->addDays($i)->toDateString(),
                 'display'         => 'background',
                 'backgroundColor' => '#f08c8c',
@@ -100,7 +104,7 @@ class EventController extends Controller
         $ovulacao = $dum->copy()->addDays(14);
         $eventos->push([
             'id'              => uniqid(),
-            'title'           => '',
+            'title'           => 'Ovulação',
             'start'           => $ovulacao->toDateString(),
             'display'         => 'background',
             'backgroundColor' => '#e42615',
@@ -113,7 +117,7 @@ class EventController extends Controller
             if ($i === 0) continue;
             $eventos->push([
                 'id'              => uniqid(),
-                'title'           => '',
+                'title'           => 'Período fértil',
                 'start'           => $ovulacao->copy()->addDays($i)->toDateString(),
                 'display'         => 'background',
                 'backgroundColor' => '#fc5849',
@@ -127,10 +131,11 @@ class EventController extends Controller
             $proxMens = $dum->copy()->addDays($duracaoCiclo * $ciclo);
             $ovulacaoProj = $proxMens->copy()->subDays(14);
 
+            // Menstruação futura
             for ($d = 0; $d < 7; $d++) {
                 $eventos->push([
                     'id'              => uniqid(),
-                    'title'           => '',
+                    'title'           => 'Menstruação',
                     'start'           => $proxMens->copy()->addDays($d)->toDateString(),
                     'display'         => 'background',
                     'backgroundColor' => '#f08c8c',
@@ -139,9 +144,10 @@ class EventController extends Controller
                 ]);
             }
 
+            // Ovulação futura
             $eventos->push([
                 'id'              => uniqid(),
-                'title'           => '',
+                'title'           => 'Ovulação',
                 'start'           => $ovulacaoProj->toDateString(),
                 'display'         => 'background',
                 'backgroundColor' => '#e42615',
@@ -149,11 +155,12 @@ class EventController extends Controller
                 'extendedProps'   => ['isProjecao' => true],
             ]);
 
+            // Período fértil futuro
             for ($j = -3; $j <= 3; $j++) {
                 if ($j === 0) continue;
                 $eventos->push([
                     'id'              => uniqid(),
-                    'title'           => '',
+                    'title'           => 'Período fértil',
                     'start'           => $ovulacaoProj->copy()->addDays($j)->toDateString(),
                     'display'         => 'background',
                     'backgroundColor' => '#fc5849',
