@@ -83,6 +83,19 @@ input:focus, textarea:focus {
     padding: 6px !important;
     width: 100% !important;
     box-shadow: none !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+}
+
+.ck.ck-toolbar .ck-toolbar__items {
+  flex-wrap: nowrap !important;
+}
+
+.ck.ck-toolbar::-webkit-scrollbar {
+  display: none !important;
 }
 
 .ck.ck-toolbar__separator {
