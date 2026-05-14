@@ -108,6 +108,26 @@
             <div id="calendar" class="min-h-[300px]"></div>
         </div>
 
+        <div class="w-full bg-[#720026] border border-[#E8A8B5]/30 rounded-2xl p-4 mt-3 flex gap-3 items-start">
+            <div class="shrink-0 mt-0.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#E8A8B5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                </svg>
+            </div>
+            <div>
+                <p class="text-[#E8A8B5] font-display text-sm mb-1">Marcou um dia errado?</p>
+                <p class="text-white/70 text-xs leading-relaxed">
+                    Vá em
+                    <a href="{{ route('registros.index') }}"
+                    class="text-[#E8A8B5] font-medium underline underline-offset-2">
+                        Registros
+                    </a>,
+                    apague os dias incorretos, volte ao calendário e marque o dia certo.
+                </p>
+            </div>
+        </div>
+
+
     </div>
 
     {{-- ───── NAVBAR ───── --}}
