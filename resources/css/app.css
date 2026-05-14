@@ -1,6 +1,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
 /* =============================================
    Base — Afrodite
    ============================================= */
@@ -19,14 +20,8 @@ body {
 a, button {
     transition: all 0.2s ease-in-out;
 }
-
-a:hover, button:hover {
-    opacity: 0.85;
-}
-
-button:active, a:active {
-    transform: scale(0.95);
-}
+a:hover, button:hover { opacity: 0.85; }
+button:active, a:active { transform: scale(0.95); }
 
 /* Inputs padrão */
 input, textarea {
@@ -37,11 +32,7 @@ input, textarea {
     padding: 0.75rem 1rem;
     font-size: 14px;
 }
-
-input::placeholder, textarea::placeholder {
-    color: rgba(255, 255, 255, 0.35);
-}
-
+input::placeholder, textarea::placeholder { color: rgba(255, 255, 255, 0.35); }
 input:focus, textarea:focus {
     outline: none;
     border-color: #E8A8B5;
@@ -61,78 +52,53 @@ input:focus, textarea:focus {
     outline: none !important;
 }
 
-/* Painel sticky da toolbar integrado à moldura */
+/* Painel sticky da toolbar */
 .ck.ck-editor__top .ck-sticky-panel,
 .ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content {
-    background-color: #900131 !important;   /* fundo sólido */
+    background-color: #900131 !important;
     border: none !important;
     border-radius: 12px 12px 0 0 !important;
     margin: 0 !important;
     padding: 0 !important;
-    box-shadow: none !important;
-    z-index: 999 !important;                /* cobre o texto ao rolar */
-    min-height: 42px !important;            /* altura mínima da faixa */
+    min-height: 42px !important;
+    z-index: 999 !important;
 }
 
-/* Toolbar */
+/* Toolbar com scroll lateral invisível */
 .ck.ck-toolbar {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important; /* Firefox */
     background-color: #900131 !important;
     border: none !important;
     border-radius: 12px 12px 0 0 !important;
     margin: 0 !important;
     padding: 6px !important;
     width: 100% !important;
-    box-shadow: none !important;
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    scrollbar-width: none !important;
 }
+.ck.ck-toolbar::-webkit-scrollbar { display: none !important; }
+.ck.ck-toolbar .ck-toolbar__items { flex-wrap: nowrap !important; }
 
-.ck.ck-toolbar .ck-toolbar__items {
-  flex-wrap: nowrap !important;
-}
-
-.ck.ck-toolbar::-webkit-scrollbar {
-  display: none !important;
-}
-
-.ck.ck-toolbar__separator {
-    background-color: rgba(255, 255, 255, 0.15) !important;
-}
-
+.ck.ck-toolbar__separator { background-color: rgba(255, 255, 255, 0.15) !important; }
 .ck.ck-toolbar .ck-button,
-.ck.ck-toolbar .ck-button__label {
-    color: rgba(255, 255, 255, 0.7) !important;
-}
-
+.ck.ck-toolbar .ck-button__label { color: rgba(255, 255, 255, 0.7) !important; }
 .ck.ck-toolbar .ck-button:hover {
     background-color: rgba(255, 255, 255, 0.08) !important;
     color: rgba(255, 255, 255, 0.9) !important;
 }
-
 .ck.ck-toolbar .ck-button.ck-on {
     background-color: rgba(255, 255, 255, 0.12) !important;
     color: rgba(255, 255, 255, 0.9) !important;
 }
-
 .ck.ck-toolbar .ck-icon {
     color: rgba(255, 255, 255, 0.7) !important;
     fill: rgba(255, 255, 255, 0.7) !important;
 }
 
-.toolbar-container {
-  overflow-x: auto;
-  white-space: nowrap;
-}
-.toolbar-container .toolbar-item {
-  display: inline-block;
-}
-
 /* Área editável */
-.ck.ck-editor__main .ck-editor__editable,
-.ck.ck-editor__main .ck-editor__editable.ck-editor__editable_inline {
+.ck.ck-editor__main .ck-editor__editable {
     background-color: #B23A48 !important;
     min-height: 200px !important;
     padding: 1rem !important;
@@ -142,13 +108,8 @@ input:focus, textarea:focus {
     border-radius: 0 0 12px 12px !important;
     color: rgba(255, 255, 255, 0.89) !important;
     margin: 0 !important;
-    box-shadow: none !important;
 }
-
 .ck.ck-editor__main .ck-editor__editable.ck-focused {
-    outline: none !important;
-    background-color: #B23A48 !important;
-    border: none !important;
     box-shadow: inset 0 0 0 2px rgba(232, 168, 181, 0.4) !important;
 }
 
@@ -164,11 +125,7 @@ input:focus, textarea:focus {
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     border-radius: 8px !important;
 }
-
-.ck.ck-list__item .ck-button {
-    color: rgba(255, 255, 255, 0.7) !important;
-}
-
+.ck.ck-list__item .ck-button { color: rgba(255, 255, 255, 0.7) !important; }
 .ck.ck-list__item .ck-button:hover,
 .ck.ck-list__item .ck-button.ck-on {
     background-color: rgba(255, 255, 255, 0.08) !important;
@@ -180,46 +137,35 @@ input:focus, textarea:focus {
     background-color: #720026 !important;
     color: rgba(255, 255, 255, 0.7) !important;
 }
+.ck.ck-tooltip__text::after { border-top-color: #720026 !important; }
 
-.ck.ck-tooltip__text::after {
-    border-top-color: #720026 !important;
-}
-
-/* Balloon (popup de link etc.) */
+/* Balloon */
 .ck.ck-balloon-panel {
     background-color: #900131 !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     border-radius: 8px !important;
 }
 
-/* Input dentro de popups */
+/* Inputs em popups */
 .ck.ck-input-text {
     background-color: #B23A48 !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
     color: rgba(255, 255, 255, 0.7) !important;
     border-radius: 6px !important;
 }
-
 .ck.ck-input-text:focus {
     border-color: rgba(232, 168, 181, 0.5) !important;
-    box-shadow: none !important;
 }
 
 /* Labels */
 .ck .ck-label,
 .ck.ck-labeled-field-view > .ck-labeled-field-view__label {
     color: rgba(232, 168, 181, 0.7) !important;
-    background-color: transparent !important;
 }
 
-/* Botões de ação nos popups */
-.ck.ck-button.ck-button-save {
-    color: rgba(232, 168, 181, 0.8) !important;
-}
-
-.ck.ck-button.ck-button-cancel {
-    color: rgba(255, 255, 255, 0.4) !important;
-}
+/* Botões de ação */
+.ck.ck-button.ck-button-save { color: rgba(232, 168, 181, 0.8) !important; }
+.ck.ck-button.ck-button-cancel { color: rgba(255, 255, 255, 0.4) !important; }
 
 /* Seleção de texto */
 .ck-editor__editable ::selection {
@@ -236,13 +182,8 @@ input:focus, textarea:focus {
     line-height: 1.7;
     font-size: 13px;
 }
-
-.ck-content h1,
-.ck-content h2,
-.ck-content h3,
-.ck-content h4,
-.ck-content h5,
-.ck-content h6 {
+.ck-content h1, .ck-content h2, .ck-content h3,
+.ck-content h4, .ck-content h5, .ck-content h6 {
     color: rgba(255, 255, 255, 0.89);
     font-family: 'Sansita One', cursive;
     margin-bottom: 0.5rem;
@@ -250,31 +191,24 @@ input:focus, textarea:focus {
     line-height: 1.3;
     font-size: 15px;
 }
-
 .ck-content strong, .ck-content b {
     color: rgba(91, 9, 9, 0.9);
     font-family: 'Sansita One', cursive;
     font-weight: 700;
-    font-size: inherit;
 }
-
 .ck-content em, .ck-content i {
     color: rgba(255, 255, 255, 0.89);
     font-family: 'Sansita One', cursive;
     font-style: italic;
 }
-
-.ck-content ul,
-.ck-content ol {
+.ck-content ul, .ck-content ol {
     color: rgb(238, 216, 216);
     font-family: 'Sansita One', cursive;
     padding-left: 1.25rem;
     margin-bottom: 0.75rem;
 }
-
 .ck-content ul { list-style-type: disc; }
 .ck-content ol { list-style-type: decimal; }
-
 .ck-content li {
     margin-bottom: 0.25rem;
     line-height: 1.6;
